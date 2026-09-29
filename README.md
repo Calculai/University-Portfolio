@@ -16,6 +16,6 @@ Lastly I had Copilot whip up a html for each to help making it easier to navigat
 
 ## Assignment guides
 
-- [IPFCE assignment guide](IPFCE.html)
-- [SOFACE assignment guide](SOFACE.html)
-- [Numerical Linear Algebra guide](NUMERICAL-LINEAR-ALGEBRA.html)
+- [IPFCE assignment guide](https://calculai.github.io/University-Portfolio/IPFCE.html)
+- [SOFACE assignment guide](https://calculai.github.io/University-Portfolio/SOFACE.html)
+- [Numerical Linear Algebra guide](https://calculai.github.io/University-Portfolio/NUMERICAL-LINEAR-ALGEBRA.html)
