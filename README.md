@@ -10,7 +10,7 @@ I could go through and redocument everything but that would be time consuming or
 
 Feel free to look around. I have also made a longer list of the skills demonstrated across the assignments.
 
-In order to make it a little easier to parse what I did I made Copilot generate a contribution.patch that shows what I have removed from the original sturcture and then added to it and it is in each the different relevant folders.  Other times like in numerical algebra with comp.py all the code is by me so no contribution.patch needed.
+In order to make it a little easier to parse what I made Copilot generate a contribution.patch that shows what I have removed from the original sturcture and then added to it and it is in each the different relevant folders.  Other times like in numerical algebra with comp.py all the code is by me so no contribution.patch needed.
 
 Lastly I had Copilot whip up a html for each to help making it easier to navigate.
 
