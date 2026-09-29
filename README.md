@@ -12,7 +12,7 @@ Feel free to look around. I have also made a longer list of the skills demonstra
 
 In order to make it a little easier to parse what I did, I made Copilot generate a contributions.patch that shows what I have removed from the original structure and then added to it, and it is in each of the different relevant folders. Other times, like in Numerical Linear Algebra with comp.py, all the code is by me, so no contributions.patch is needed.
 
-Lastly, I had Copilot whip up an HTML page for each to help make it easier to navigate.
+Lastly, I had Copilot whip up an HTML page for each major assignment clusters to help make it easier to navigate.
 
 ## Assignment guides
 
