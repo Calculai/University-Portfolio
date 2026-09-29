@@ -1,0 +1,241 @@
+﻿diff --git a/exercise1.c b/exercise1.c
+index db49bbd..3247dd2 100644
+--- a/exercise1.c
++++ b/exercise1.c
+@@ -4,4 +4,9 @@
+ // Write a *recursive* function that prints out a linked list of integers, with the following signature:
+ void print_list(node *p){
+ 
++    if (p == NULL) {return;}
++    
++    fprintf(stderr,"%d ", p->data);
++    p = p->next;
++    print_list(p);
+ }
+\ No newline at end of file
+diff --git a/exercise3.c b/exercise3.c
+index 8ba045e..ef267dc 100644
+--- a/exercise3.c
++++ b/exercise3.c
+@@ -3,5 +3,8 @@
+ 
+ // Write a recursive function that takes a linked list of integers, and returns the sum of the _squares_ of the integers in the list
+ int sum_squares(node *p){
+-    return -1;
++    
++    if (p == NULL) {return 0;}
++
++    return ((p->data * p->data) + sum_squares(p->next));
+ }
+\ No newline at end of file
+diff --git a/exercise4.c b/exercise4.c
+index f24db9b..e9b995c 100644
+--- a/exercise4.c
++++ b/exercise4.c
+@@ -4,5 +4,18 @@
+ // Write a recursive function that takes a linked list of integers, and a function pointer f,
+ // and returns a new linked list where each integer has been transformed by f
+ node *map(node *p, int (*f)(int)){
+-    return NULL;
+-}
+\ No newline at end of file
++
++    if (p == NULL) {return NULL;} 
++
++    node* n = malloc(sizeof(node));
++    if (n == NULL) {
++        fprintf(stderr, "malloc failed in map\n");
++        exit(EXIT_FAILURE);
++    }
++
++    n->data = f(p->data);
++    n->next = map(p->next, f);
++
++    return n;
++}
++
+diff --git a/exercise5.c b/exercise5.c
+index e617c8c..d9c8a97 100644
+--- a/exercise5.c
++++ b/exercise5.c
+@@ -1,18 +1,94 @@
+ #include "binary_tree.h"
++#include <stdio.h>
++
++static tree_node* small(tree_node* root);
+ 
+ //insert returns the root of the modified tree
+ tree_node* insert(int data, tree_node* root){
+-    return NULL;
++
++    if (root == NULL) 
++    {
++        root = malloc(sizeof(tree_node));
++        if (root == NULL) {
++        fprintf(stderr, "malloc failed in insert\n");
++        exit(EXIT_FAILURE);
++        }
++
++        root->data = data;
++        root->left = NULL;
++        root->right = NULL;
++        return root;
++    } 
++    // base case
++
++    if (data > root->data) {
++        root->right = insert(data, root->right);
++    } else if (data < root->data) {
++        root->left = insert(data, root->left);
++    }
++    // return the original root, not the child
++    return root;
+ }
+ 
+ //remove returns the root of the modified tree
+ tree_node* remove_node(int data, tree_node* root){
+-    return NULL;
++        
++    if (root == NULL) {
++        return NULL;
++    } // base case
++
++    // found
++    if (data == root->data) {
++        if (root->left == NULL && root->right == NULL)
++        {
++            free(root);
++            return NULL;
++        }
++        
++        if (root->right == NULL)
++        {
++            tree_node *temp = root->left;
++            free(root);
++            return temp;
++        }
++        
++        if (root->left == NULL)
++        {
++            tree_node *temp = root->right;
++            free(root);
++            return temp;
++        }
++
++        if (root->left != NULL && root->right != NULL)
++        {
++            tree_node *min = small(root->right);
++            root->data = min->data;
++            root->right = remove_node(root->data, root->right);
++            
++        }
++        return root; 
++    }
++
++    if (data > root->data) root->right = remove_node(data, root->right);
++    if (data < root->data) root->left = remove_node(data, root->left);
++
++    return root;
+ }
+ 
+ //contains returns true if data is in the tree, false otherwise
+ bool contains(int data, tree_node* root){
+-    return false;
++    
++    if (root == NULL) {return false;} // base case
++
++    // found
++    if (data == root->data) {return true;}
++    // look right
++    if (data > root->data) {return contains(data,root->right);}
++    // look left
++    if (data < root->data) {return contains(data,root->left);}
++    
++
++    return false; // base case
+ }
+ 
+ //full 
+@@ -22,5 +98,15 @@ bool full(tree_node* root){
+ 
+ //empty
+ bool empty(tree_node* root){
++    if (root == NULL)
++    {
++        return true;
++    }
++    
+     return false;
+-}   
+\ No newline at end of file
++}   
++
++static tree_node* small(tree_node* root) {  
++    if (root->left == NULL) {return root;}
++    return small(root->left);
++}
+\ No newline at end of file
+diff --git a/test_BT.c b/test_BT.c
+new file mode 100644
+index 0000000..534dc09
+--- /dev/null
++++ b/test_BT.c
+@@ -0,0 +1,58 @@
++#include "binary_tree.h"
++#include <stdio.h>
++#include <assert.h>
++
++
++int main(void) {
++    tree_node *root = NULL;
++
++    FILE *file = fopen("results.txt", "w"); // open file for writing
++    if (!file) {
++        perror("fopen failed");
++        return 1;
++    }
++
++    // Test insert
++    fprintf(file, "Test 1 insert: ");
++    root = insert(10, root);
++    root = insert(5, root);
++    root = insert(15, root);
++    root = insert(3, root);
++    root = insert(7, root);
++    root = insert(12, root);
++
++    assert(contains(10, root) == true);
++    assert(contains(5, root) == true);
++    assert(contains(15, root) == true);
++    assert(contains(3, root) == true);
++    assert(contains(7, root) == true);
++    assert(contains(12, root) == true);
++    assert(contains(999, root) == false);
++    fprintf(file, "passed!\n\n");
++
++    // Test remove
++    fprintf(file, "Test 2 remove: ");
++    root = remove_node(3, root); // remove leaf
++    assert(contains(3, root) == false);
++    root = remove_node(5, root); // remove node with one child
++    assert(contains(5, root) == false);
++    root = remove_node(10, root); // remove node with two children
++    assert(contains(10, root) == false);
++    fprintf(file, "passed!\n\n");
++
++    // Test empty and full
++    fprintf(file, "Test 3 empty and full: ");   
++    assert(empty(root) == false);
++    assert(full(root) == false);
++    root = remove_node(7, root);
++    root = remove_node(12, root);
++    root = remove_node(15, root);
++    assert(empty(root) == true);
++    assert(full(root) == false);
++    fprintf(file, "passed!\n\n");
++
++    fprintf(file, "All tests passed successfully!");
++
++    fclose(file); // close the file
++    return 0;
++}

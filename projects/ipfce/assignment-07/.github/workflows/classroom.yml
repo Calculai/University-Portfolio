@@ -1,0 +1,83 @@
+name: Autograding Tests
+on:
+  push:
+    branches: ['*']
+  workflow_dispatch:
+  repository_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  test-exercises:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    strategy:
+      fail-fast: false  # Don't stop on first failure
+      matrix:
+        exercise: [1, 2]  # List of exercises to test
+        include:
+          - exercise: 1
+            name: "Taylor Sine Function"
+          - exercise: 2
+            name: "Stack Implementation"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Compile Exercise ${{ matrix.exercise }}
+        id: compile
+        continue-on-error: true
+        run: |
+          echo "Compiling Exercise ${{ matrix.exercise }}: ${{ matrix.name }}"
+          if [ "${{ matrix.exercise }}" -eq 1 ]; then
+            gcc -Iinclude -std=c11 -lm -o tests/test_exercise${{ matrix.exercise }} \
+              tests/test_exercise${{ matrix.exercise }}.c \
+              exercise${{ matrix.exercise }}.c
+          else
+            gcc -Iinclude -std=c11 -o tests/test_exercise${{ matrix.exercise }} \
+              tests/test_exercise${{ matrix.exercise }}.c \
+              exercise${{ matrix.exercise }}.c
+          fi
+          echo "compile_success=$?" >> $GITHUB_OUTPUT
+      
+      - name: Run Exercise ${{ matrix.exercise }} Test
+        id: test
+        continue-on-error: false
+        if: steps.compile.outputs.compile_success == '0'
+        run: |
+          echo "Running Exercise ${{ matrix.exercise }} test..."
+          ./tests/test_exercise${{ matrix.exercise }}
+      
+      - name: Verify Exercise ${{ matrix.exercise }} Results
+        uses: classroom-resources/autograding-io-grader@v1
+        continue-on-error: true
+        id: grader
+        if: steps.test.outcome == 'success'
+        with:
+          test-name: Exercise ${{ matrix.exercise }} - ${{ matrix.name }}
+          command: echo "Exercise ${{ matrix.exercise }} tests passed"
+          expected-output: Exercise ${{ matrix.exercise }} tests passed
+          comparison-method: contains
+          timeout: 10
+
+  report-results:
+    runs-on: ubuntu-latest
+    needs: test-exercises
+    if: always()  # Run even if some tests failed
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Generate Summary Report
+        run: |
+          echo "## � Assignment 7 Autograding Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Exercise | Status | Description |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|-------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 1 | ${{ needs.test-exercises.result }} | Taylor Sine Function |" >> $GITHUB_STEP_SUMMARY
+          echo "| 2 | ${{ needs.test-exercises.result }} | Stack Implementation |" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,58 @@
+name: Autograding Tests
+on:
+  push:
+  workflow_dispatch:
+  repository_dispatch:
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  test-exercises:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    strategy:
+      fail-fast: false
+      matrix:
+        exercise: [3, 4, 5]
+        include:
+          - exercise: 3
+            name: "Exercise 3"
+          - exercise: 4
+            name: "Exercise 4"
+          - exercise: 5
+            name: "Exercise 5"
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Compile Exercise ${{ matrix.exercise }}
+      id: compile
+      continue-on-error: true
+      run: |
+        echo "Compiling Exercise ${{ matrix.exercise }}: ${{ matrix.name }}"
+        gcc -Iinclude -o tests/test_exercise${{ matrix.exercise }} \
+          tests/test_exercise${{ matrix.exercise }}.c \
+          exercise${{ matrix.exercise }}.c
+        echo "compile_success=$?" >> $GITHUB_OUTPUT
+      
+    - name: Run Exercise ${{ matrix.exercise }} Test
+      id: test
+      continue-on-error: false
+      if: steps.compile.outputs.compile_success == '0'
+      run: |
+        echo "Running Exercise ${{ matrix.exercise }} test..."
+        ./tests/test_exercise${{ matrix.exercise }}
+      
+    - name: Verify Exercise ${{ matrix.exercise }} Results
+      uses: classroom-resources/autograding-io-grader@v1
+      continue-on-error: true
+      id: grader
+      if: steps.test.outcome == 'success'
+      with:
+        test-name: Exercise ${{ matrix.exercise }} - ${{ matrix.name }}
+        command: echo "Exercise ${{ matrix.exercise }} tests passed"
+        expected-output: Exercise ${{ matrix.exercise }} tests passed
+        comparison-method: contains
+        timeout: 100

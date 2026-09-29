@@ -1,0 +1,194 @@
+﻿diff --git a/include/print_logger.hpp b/include/print_logger.hpp
+index f8f8283..c19fd30 100644
+--- a/include/print_logger.hpp
++++ b/include/print_logger.hpp
+@@ -7,6 +7,5 @@
+ class PrintLogger : public Logger
+ {
+ public:
+-
+     virtual void log(std::string msg) override;
+ };
+\ No newline at end of file
+diff --git a/include/template_calculator.hpp b/include/template_calculator.hpp
+index b562612..a719995 100644
+--- a/include/template_calculator.hpp
++++ b/include/template_calculator.hpp
+@@ -14,13 +14,35 @@ public:
+     // Implement this:
+     T sum(T a, T b)
+     {
+-        return 0;
++        // we calculate the sum
++        T r = a + b;
++        
++        // we make a stringstream and then print to it
++        std::stringstream ss;
++        ss << "taking the sum of: " << a << " and " << b << " which is " << r;
++    
++        // then we log the message using the logger
++        logger->log(ss.str());
++
++        // we return our result
++        return r;
+     }
+ 
+     // Implement this:
+     T multiply(T a, T b)
+     {
+-        return 0;
++        // get the product
++        T r = a * b;
++
++        // make the stringstream and print to it
++        std::stringstream ss;
++        ss << "taking the product of: " << a << " and " << b << " which is " << r;
++
++        // log it
++        logger->log(ss.str());
++
++        // return r
++        return r;
+     }
+ 
+ private:
+diff --git a/src/file_logger.cpp b/src/file_logger.cpp
+index edf5eff..e11f11e 100644
+--- a/src/file_logger.cpp
++++ b/src/file_logger.cpp
+@@ -5,14 +5,54 @@
+ // Implement this:
+ FileLogger::FileLogger(std::string filename)
+ {
++    // logfile is an ofstream object, which has an open function
++    logfile.open(filename, std::ios::app);
++    // called like this it opens a file with filename of the string then it
++    // appends to the file. This creates a persistent log file that keeps
++    // all the logs between runs of the program.
++
++    // alternatively we could open the file in trunc mode to overwrite it each time:
++    // logfile.open(filename, std::ios::trunc);
++    // this is just a design choice, it might be important if we use it a lot 
++    // to avoid massive log files, but for this assignment I think appending is fine.
++
++
++    // check if the file was opened successfully
++    if (!logfile.is_open()) {
++        std::cerr << "Error opening file: " << filename << std::endl;
++        return;
++        // print the error to terminal and return
++    }
+ }
+ 
+ // Implement this:
+ void FileLogger::log(std::string msg)
+ {
++    // we need to write the message to the file, we can use the ofstream object for this
++    if (logfile.is_open()) {
++        logfile << msg << std::endl;
++    } else {
++        std::cerr << "Error: log file could not open.";
++        return;
++        // print the error to terminal and return
++    }
+ }
+ 
+ // Implement this:
+-FileLogger::~FileLogger()
+-{
+-}
+\ No newline at end of file
++FileLogger::~FileLogger() {}
++// since I am going with a persistant log file
++// I don't close the file so the desturctor is default
++
++/*
++if i wanted to close the file each time i would do it like this:
++FileLogger::~FileLogger() {
++    if (logfile.is_open()) {
++        logfile.close();
++    }
++}
++this uses the close function to delete the txtfile
++
++after reading the test file this implementation would
++not pass since it requires the file to stay between
++runs
++*/
+\ No newline at end of file
+diff --git a/src/int_calculator.cpp b/src/int_calculator.cpp
+index 0991011..49c149d 100644
+--- a/src/int_calculator.cpp
++++ b/src/int_calculator.cpp
+@@ -3,16 +3,46 @@
+ #include "int_calculator.hpp"
+ 
+ // Constructor Injection
+-IntCalculator::IntCalculator(Logger *logger) : logger(logger) {}
++IntCalculator::IntCalculator(Logger *log) : logger(log) {}
++// construct the class and assign the logger variable to be the passed logger pointer
++// changed to logger(log) to make it clearer for me as I am new to C++ and logger(logger) is confusing
+ 
+ // Implement this:
+ int IntCalculator::sum(int a, int b)
+ {
+-    return 0;
++    // we calculate the sum
++    int r = a + b;
++    /*
++    We need to log this sum, the log requires a string,
++    so we need to build a string. For this I found 
++    stringstream.
++    */
++    std::stringstream ss;
++    ss << "taking the sum of: " << a << " and " << b << " which is " << r;
++    
++    // then we log the message using the logger
++    logger->log(ss.str());
++    // call logger variable and use its log function and pass the string we built using stringstream
++
++    // finally we return the result
++    return r;
+ }
+ 
+ // Implement this:
+ int IntCalculator::multiply(int a, int b)
+ {
+-    return 0;
++    // other implementation has more deeper thought this just outlines funcitonality
++
++    // get the product
++    int r = a * b;
++
++    // make the stringstream and print to it
++    std::stringstream ss;
++    ss << "taking the product of: " << a << " and " << b << " which is " << r;
++
++    // log it
++    logger->log(ss.str());
++
++    // return r
++    return r;
+ }
+\ No newline at end of file
+diff --git a/src/print_logger.cpp b/src/print_logger.cpp
+index 69aad47..c69b65e 100644
+--- a/src/print_logger.cpp
++++ b/src/print_logger.cpp
+@@ -4,4 +4,8 @@
+ 
+ void PrintLogger::log(std::string message)
+ {
++    // we just print the message to the terminal
++    std::cout << message << std::endl;
++    // not sure if I am supposed to implement this
++    // but it is easy enough that I did
+ }
+\ No newline at end of file
+diff --git a/tests/src/log.txt b/tests/src/log.txt
+new file mode 100644
+index 0000000..0373d93
+--- /dev/null
++++ b/tests/src/log.txt
+@@ -0,0 +1 @@
++abcdef

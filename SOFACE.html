@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOFACE | Assignment Guide</title>
+  <style>
+    :root { color-scheme: light; --ink: #20292d; --muted: #53636a; --paper: #f5f7f5; --line: #d5dfda; --accent: #b6492d; --tag: #dceaf5; --tag-ink: #174565; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 Georgia, "Times New Roman", serif; }
+    main { width: min(960px, calc(100% - 36px)); margin: 0 auto; padding: 48px 0 72px; }
+    header { border-bottom: 3px solid var(--ink); padding-bottom: 28px; margin-bottom: 28px; }
+    .eyebrow { color: var(--accent); font: 700 12px/1.4 "Segoe UI", sans-serif; letter-spacing: 1px; text-transform: uppercase; }
+    h1 { font-size: clamp(34px, 6vw, 58px); line-height: 1.05; margin: 12px 0; }
+    h2 { font-size: 25px; line-height: 1.2; margin: 0 0 10px; }
+    p { margin: 8px 0 14px; }
+    .intro { max-width: 760px; font-size: 19px; }
+    .notice { border-left: 4px solid var(--accent); background: #fff; padding: 12px 16px; color: var(--muted); font: 14px/1.55 "Segoe UI", sans-serif; }
+    nav { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 22px 0 34px; font: 600 14px "Segoe UI", sans-serif; }
+    a { color: #125477; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: var(--accent); }
+    .entry { padding: 23px 0 24px; border-top: 1px solid var(--line); }
+    .tag { display: inline-block; padding: 3px 9px; margin-right: 5px; border-radius: 3px; background: var(--tag); color: var(--tag-ink); font: 600 11px/1.4 "Segoe UI", sans-serif; vertical-align: 2px; }
+    .links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; font: 600 14px "Segoe UI", sans-serif; }
+    footer { border-top: 1px solid var(--line); margin-top: 30px; padding-top: 20px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 560px) { main { width: min(100% - 24px, 960px); padding-top: 28px; } .intro { font-size: 17px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">SOFACE · Software architecture</div>
+    <h1>Designing systems that can change</h1>
+    <p class="intro">A guided map through the software-architecture assignments, moving from C-style abstraction to C++ design patterns, networking, concurrency, specification, and reuse.</p>
+    <p class="notice"><strong>Attribution:</strong> each entry links to the original assignment brief and the local implementation. Where available, the <code>contributions.patch</code> records changes relative to the supplied repository.</p>
+  </header>
+
+  <nav aria-label="Assignment navigation">
+    <a href="#a2">Assignment 2</a><a href="#a3">3</a><a href="#a4">4</a><a href="#a5">5</a><a href="#a6">6</a><a href="#a7">7</a><a href="#a8">8</a><a href="#a9">9</a><a href="#a10">10</a><a href="#a11">11</a><a href="#a12">12</a>
+  </nav>
+
+  <section class="entry" id="a2">
+    <h2>Assignment 2 · Structuring polymorphism in C</h2>
+    <p><span class="tag">Abstraction</span> Recreates a shoe-shop data structure with structs, then emulates an abstract class using function pointers.</p>
+    <div class="links"><a href="projects/soface/assignment-02/README.md">Read assignment brief</a><a href="projects/soface/assignment-02/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-02/">Browse implementation</a></div>
+  </section>
+
+  <section class="entry" id="a3">
+    <h2>Assignment 3 · Dependency injection and templates</h2>
+    <p><span class="tag">SOLID</span> Separates calculator logic from logging through dependency injection, adds file logging, applies the strategy pattern, and generalises arithmetic with templates.</p>
+    <div class="links"><a href="projects/soface/assignment-03/README.md">Read assignment brief</a><a href="projects/soface/assignment-03/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-03/tests/">Browse tests</a></div>
+  </section>
+
+  <section class="entry" id="a4">
+    <h2>Assignment 4 · Visitor and observer patterns</h2>
+    <p><span class="tag">Design patterns</span> Implements double dispatch for zoo visitors and observers that track animal interactions and events.</p>
+    <div class="links"><a href="projects/soface/assignment-04/README.md">Read assignment brief</a><a href="projects/soface/assignment-04/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-04/tests/">Browse tests</a></div>
+  </section>
+
+  <section class="entry" id="a5">
+    <h2>Assignment 5 · Pipes and filters</h2>
+    <p><span class="tag">Architecture</span> Builds a reusable pipeline of filters: watching monkeys, changing their hunger, and cloning them as data passes through the chain.</p>
+    <div class="links"><a href="projects/soface/assignment-05/README.md">Read assignment brief</a><a href="projects/soface/assignment-05/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-05/tests/">Browse tests</a></div>
+  </section>
+
+  <section class="entry" id="a6">
+    <h2>Assignment 6 · Client-server networking</h2>
+    <p><span class="tag">Networking</span> Uses Boost.Asio to inspect a daytime client/server example and transmit an image as bytes between a server and client.</p>
+    <div class="links"><a href="projects/soface/assignment-06/README.md">Read assignment brief</a><a href="projects/soface/assignment-06/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-06/src/">Browse source</a><a href="projects/soface/assignment-06/cat.jpg">View source image</a></div>
+  </section>
+
+  <section class="entry" id="a7">
+    <h2>Assignment 7 · Parallel matrix operations</h2>
+    <p><span class="tag">Concurrency</span> Compares single-threaded and partitioned matrix scalar multiplication, dividing work across threads and reasoning about shared writes.</p>
+    <div class="links"><a href="projects/soface/assignment-07/README.md">Read assignment brief</a><a href="projects/soface/assignment-07/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-07/tests/">Browse tests</a></div>
+  </section>
+
+  <section class="entry" id="a8">
+    <h2>Assignment 8 · Peer-to-peer chat</h2>
+    <p><span class="tag">Messaging</span> Studies network architectures and modifies a ZeroMQ chat program so clients can register, resolve peers, and display message senders.</p>
+    <div class="links"><a href="projects/soface/assignment-08/README.md">Read assignment brief</a><a href="projects/soface/assignment-08/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-08/discussion.md">Read network discussion</a><a href="projects/soface/assignment-08/src/">Browse source</a></div>
+  </section>
+
+  <section class="entry" id="a9">
+    <h2>Assignment 9 · Template method</h2>
+    <p><span class="tag">Object design</span> Models vehicles with a base-class algorithm and derived vehicle implementations for engine torque, gearing, and physical properties.</p>
+    <div class="links"><a href="projects/soface/assignment-09/README.md">Read assignment brief</a><a href="projects/soface/assignment-09/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-09/tests/">Browse tests</a></div>
+  </section>
+
+  <section class="entry" id="a10">
+    <h2>Assignment 10 · Cyclomatic complexity and coverage</h2>
+    <p><span class="tag">Code quality</span> Draws control-flow graphs, calculates cyclomatic complexity, and designs unit tests to cover independent execution paths.</p>
+    <div class="links"><a href="projects/soface/assignment-10/README.md">Read assignment brief</a><a href="projects/soface/assignment-10/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-10/docs/">Browse diagrams</a></div>
+  </section>
+
+  <section class="entry" id="a11">
+    <h2>Assignment 11 · Specification and tests</h2>
+    <p><span class="tag">Specification</span> Implements a generic dictionary from a written interface and writes tests that translate requirements into branch coverage.</p>
+    <div class="links"><a href="projects/soface/assignment-11/README.md">Read assignment brief</a><a href="projects/soface/assignment-11/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-11/tests/">Browse tests</a></div>
+  </section>
+
+  <section class="entry" id="a12">
+    <h2>Assignment 12 · Reuse and RTS game design</h2>
+    <p><span class="tag">Reuse</span> Combines weapons, units, observers, and composite selection into a small real-time strategy game model.</p>
+    <div class="links"><a href="projects/soface/assignment-12/README.md">Read assignment brief</a><a href="projects/soface/assignment-12/contributions.patch">View contribution patch</a><a href="projects/soface/assignment-12/tests/">Browse tests</a></div>
+  </section>
+
+  <footer><p>Some assignments depend on external libraries or platform-specific setup. The individual READMEs contain the original build and execution notes.</p></footer>
+</main>
+</body>
+</html>

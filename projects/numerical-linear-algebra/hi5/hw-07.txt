@@ -1,0 +1,130 @@
+---PAGE 1---
+Numerical Linear Algebra Spring 2026
+Problem Set 7
+Exercise7.1.Inℝ 3, consider the inner product
+*
+𝑥0
+𝑥1
+𝑥2
+
+,
+
+𝑦0
+𝑦1
+𝑦2
+
++
+=7𝑥 0𝑦0 +2𝑥 1𝑦1 +3𝑥 2𝑦2.(∗)
+(a) Show that 𝑢=(1,−1,1) and 𝑣=(−1,−2,1) are orthogonal with respect
+to this inner product.
+(b) Compute the projections of 𝑤=(1,0,0) onto 𝑢 and onto 𝑣 in this inner
+product.
+(c) Write (∗) in the form𝑥 𝑇 𝐴𝑦for a suitable matrix𝐴.
+Exercise7.2.Use row operations to decide which of the following collections
+are linearly independent in the given vector spaces:
+(a)(1,0,0),(1,1,0),(1,1,1)inℝ 3,
+(b)(1,1,0),(1,0,1),(0,1,1)inℝ 3,
+(c)(1,−1,0),(−1,0,1),(0,1,−1)inℝ 3,
+(d)(1,𝑖,1+𝑖),(𝑖,1−𝑖,1),(−1+𝑖,1,𝑖)inℂ 3.
+Exercise7.3.Previous exam problem, Summer 2024, problem 4. The sigmoid
+function𝜎:ℝ→ℝis given by
+𝜎(𝑥)= 𝑒𝑥
+1+𝑒 𝑥
+for each𝑥∈ℝ, and its derivative is
+𝜎′(𝑥)= 𝑒𝑥
+(1+𝑒 𝑥)2 .
+(a) Show that the condition number𝜅(𝜎)of𝜎at arbitrary𝑥∈ℝis
+𝜅(𝜎)= |𝑥|
+1+𝑒 𝑥 .
+(b) For which of the following 𝑥∈ℝ is 𝜅(𝜎) greater than 106? Choose one
+of the following answers: (i) 𝑥=10 7, (ii) 𝑥=10 −7, (iii) 𝑥=−10 −7,
+(iv)𝑥=−10 7. Choose one answer and justify it.
+1
+
+---PAGE 2---
+Exercise7.4.Consider the function
+𝑓(𝑥)= 4
+4+𝑥 2 ,−2⩽𝑥⩽2.
+Set 𝑥0 =−2 , 𝑥1 =−1 , 𝑥2 =0 , 𝑥3 =1 , 𝑥4 =2 . Give approximations to
+∫ 2
+−2 𝑓(𝑥)𝑑𝑥
+computed from𝑥 0,𝑥 1, . . . ,𝑥4 using
+(a) function values at the left endpoint of each subinterval,
+(b) function values at the right endpoint of each subinterval,
+(c) the trapezoidal rule,
+(d) Simpson’s rule.
+What is the exact value of the integral? How large is the error in each of the
+four approximations above?
+Exercise7.5.Use the classical Gram–Schmidt process to compute 𝑄𝑅-decompositions
+of the following matrices:
+(a)
+2 0
+0 1
+
+,
+(b)
+2 1
+0 3
+
+,
+(c)
+
+1 0 1
+0 1 1
+1 1 0
+
+,
+(d)
+
+−1 0 1
+0 1−1
+1−1 0
+
+.
+Exercise7.6.Implement Simpson’s rule in Python. Use it to compute an approx-
+imation of the integral ∫ 5
+1/5
+log(𝑥)
+1+𝑥 𝑑𝑥,
+that you can guarantee is correct to5decimal places.
+Hand-in Assignment 5
+This assignment may be done in groups of size 1 to 4, from the same tutorial
+section. Include the names of all group members in your submission, and have
+each group member upload a copy of the solution as one PDF file in Brightspace
+2
+
+---PAGE 3---
+under “Course Tools > Assignments > Hand-in 5” . The deadline is set by your
+instructor and falls in week12.
+We will see how to move a planar figure to a standard orientation. Consider
+the figure-eight curve in the plane given by
+𝑥(𝑡)=4 cos(𝑡),𝑦(𝑡)=sin(2𝑡),for0⩽𝑡⩽2𝜋.
+We will construct data points that lie close to a rotated version of this curve.
+(a) Plot the curve(𝑥(𝑡),𝑦(𝑡))in Python.
+(b) Use
+rng = np.random.default_rng()
+theta = rng.uniform(...)
+to choose a random angle 𝜃 between 𝜋/7 and 6𝜋/7. Rotate the curve with
+the rotation matrix𝑅=
+h
+cos(𝜃) −sin(𝜃)
+sin(𝜃)cos(𝜃)
+i
+, and plot the result.
+(c) For a reasonably large 𝑛, e.g. 𝑛=2000 , form a (2×𝑛) -matrix whose
+columns are random points from the rotated curve. Using
+rng.normal(0.0, 0.1, (2, n)),
+or something similar, add noise to all entries to obtain a matrix 𝐴. Plot
+the resulting points.
+Now we try to recover how the figure from𝐴 can be mapped back to the original
+curve, without knowing the matrix𝑅.
+(d) For each row of 𝐴, subtract its mean value to form a new matrix 𝐵 where
+each row has mean0.
+You may usenp.mean(..., axis=..., keepdims=...).
+(e) Use Python to compute the singular value decomposition 𝐵=𝑈Σ𝑉 𝑇
+of 𝐵. State 𝑈∈ℝ 2×2 and the singular values. Verify that 𝑈 is orthogonal.
+(f) Describe how the singular values and the left singular vectors of 𝐵 are
+related to the geometry of the figure.
+(g) Show how the orthogonal matrix 𝑈 can be used to rotate the figure
+represented by𝐵so that it is close to the original figure-eight curve.
+3

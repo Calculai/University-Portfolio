@@ -1,0 +1,359 @@
+﻿diff --git a/exercise2.c b/exercise2.c
+index 964839f..f12b2bc 100644
+--- a/exercise2.c
++++ b/exercise2.c
+@@ -15,9 +15,40 @@
+  * 
+  * The function should sort the list by rearranging pointers,
+  * not by creating new nodes or swapping data values.
++ * Returns pointer to the new head of the sorted list.
+  */
+-void isort(node* list) {
+-    /* TODO: Implement insertion sort for linked list */
++node* isort(node* list) {
++    
++    if (list == NULL || list->next == NULL) {return list;}
++    
++    node* sorted = NULL;
++
++    while (list != NULL) {
++        node* curr = list;
++        list = list->next;
++        /*
++        Insertion sorting needs to look through all previously sorted elements so
++        with a traditionally linked list it gets very complicated so we are going
++        to make a list called sorted where we have all the sorted elements
++
++        In this implementation we will go from the bottom of the list which makes 
++        sense since we make a sepparate sorted list. It also doesn't create new
++        nodes so it is an in-place implementation
++        */
++
++        if (sorted == NULL || curr->data < sorted->data) { 
++            curr->next = sorted; // Linkes node to sorted list
++            sorted = curr;  // Sets head of sorted list
++        } else {
++            node* temp = sorted;
++            while (temp->next != NULL && temp->next->data < curr->data) {temp = temp->next;} 
++            // Goes through sorted list till the current node data is smaller than next node data
++
++            curr->next = temp->next; // Inserts node and relinks list
++            temp->next = curr;
++        }
++    }
++    return sorted;
+ }
+ 
+ /* Helper function to print the list */
+@@ -33,4 +64,30 @@ void print_list(node* list) {
+     printf(" -> NULL\n");
+ }
+ 
++/* Helper function to create a node */
++node *create_node(int data)
++{
++    node *new_node = (node *)malloc(sizeof(node));
++    if (!new_node)
++    {
++        fprintf(stderr, "Memory allocation failed\n");
++        exit(EXIT_FAILURE);
++    }
++    new_node->data = data;
++    new_node->next = NULL;
++    return new_node;
++}
++
++/* Helper function to free the list */
++void free_list(node *list)
++{
++    node *current = list;
++    node *next_node;
+ 
++    while (current != NULL)
++    {
++        next_node = current->next;
++        free(current);
++        current = next_node;
++    }
++}
+diff --git a/exercise3.c b/exercise3.c
+index 2da7588..e4e0772 100644
+--- a/exercise3.c
++++ b/exercise3.c
+@@ -7,6 +7,8 @@
+  */
+ 
+ #include "exercise3.h"
++#include <assert.h>
++#include <string.h>
+ 
+ /* 
+  * Initialize an empty queue
+@@ -15,7 +17,12 @@
+  * Post-condition: queue is empty with front and rear set to NULL
+  */
+ void initialize(queue *q) {
+-    /* TODO: Initialize the queue */
++    memset(q, 0, sizeof(queue)); 
++    /*
++    Will ensure even if there are more fields 
++    added they are set to zero equivalent for 
++    data type
++    */
+ }
+ 
+ /* 
+@@ -27,7 +34,25 @@ void initialize(queue *q) {
+  * Post-condition: x is added to the rear of the queue
+  */
+ void enqueue(queue *q, int x) {
+-    /* TODO: Implement enqueue */
++   
++    node* n1 = malloc(sizeof(node));
++    if (n1 == NULL) {printf("Memory allocation failed\n"); return;}
++
++    n1->data = x;
++    n1->next = NULL;
++    if (q->count == 0)
++    {
++        q->front = n1;
++        q->rear = n1;
++        
++    }else{
++        q->rear->next = n1;
++        q->rear = n1;
++    }
++    
++    q->count++;
++    assert(q->rear->data == x);
++    return;
+ }
+ 
+ /* 
+@@ -38,8 +63,15 @@ void enqueue(queue *q, int x) {
+  * Post-condition: front item is removed and returned
+  */
+ int dequeue(queue *q) {
+-    /* TODO: Implement dequeue */
+-    return 0;  
++    if (empty(q)) {printf("failed to dequeue, queue empty, returned -1\n"); return -1;}
++    
++    int val = q->front->data;
++    node* garb = q->front;
++    q->front = q->front->next;
++    free(garb);
++    q->count--;
++
++    return val;  
+ }
+ 
+ /* 
+@@ -48,8 +80,7 @@ int dequeue(queue *q) {
+  * Returns: true if queue is empty, false otherwise
+  */
+ bool empty(const queue *q) {
+-    /* TODO: Implement empty check */
+-    return false; 
++    return (q->count == 0); 
+ }
+ 
+ /* 
+@@ -58,8 +89,7 @@ bool empty(const queue *q) {
+  * Returns: true if queue is full, false otherwise
+  */
+ bool full(const queue *q) {
+-    /* TODO: Implement full check */
+-    return false;
++    return (0 == 1);
+ }
+ 
+ /* Helper function to print the queue */
+diff --git a/exercise4.c b/exercise4.c
+index fe54406..e50db5e 100644
+--- a/exercise4.c
++++ b/exercise4.c
+@@ -63,6 +63,8 @@ bool full(stack *s) {
+  * Post-condition: both stacks in the queue are empty
+  */
+ void init_queue(queue *q) {
++    initialize(&q->s1);
++    initialize(&q->s2);
+     /* TODO: initialize queue */
+ }
+ 
+@@ -72,6 +74,7 @@ void init_queue(queue *q) {
+  * x: item to be inserted
+  */
+ void enqueue(queue *q, int x) {
++    push(&q->s1,x);
+     /* TODO: Implement enqueue using ONLY stack operations */
+ }
+ 
+@@ -80,9 +83,18 @@ void enqueue(queue *q, int x) {
+  * q: pointer to the queue structure
+  */
+ int dequeue(queue *q) {
+-    /* TODO: Implement dequeue using ONLY stack operations */
++    if (queue_empty(q)) {printf("failed to dequeue, queue is empty, returning -1"); return -1;}
++
++    while (!empty(&q->s1)) {push(&q->s2,pop(&q->s1));} 
++    // Reverse order to give access to back of queue
+     
+-    return 0;  // TODO: Replace with actual implementation
++    int val = pop(&q->s2); 
++    // Takes the former rear of queue
++
++    while (!empty(&q->s2)) {push(&q->s1,pop(&q->s2));} 
++    // Reverse order to original order with missing element from rear
++
++    return val;  
+ }
+ 
+ /* 
+@@ -91,15 +103,13 @@ int dequeue(queue *q) {
+  * Returns: true if both stacks are empty, false otherwise
+  */
+ bool queue_empty(queue *q) {
+-    /* TODO: Implement using ONLY stack operations */
+-    return false;  // TODO: Replace with actual implementation
++    return empty(&q->s1);  
+ }
+ 
+ /* 
+ * Check if the queue is full
+ */
+ bool queue_full(queue *q) {
+-    /* TODO: Implement using ONLY stack operations */
+     return false;
+ }
+ 
+diff --git a/include/exercise2.h b/include/exercise2.h
+index a196180..df7d1ba 100644
+--- a/include/exercise2.h
++++ b/include/exercise2.h
+@@ -21,8 +21,9 @@ typedef struct node {
+  * Sort a singly linked list in-place using insertion sort
+  * The list should be sorted from smallest to largest
+  * No new nodes should be allocated - only pointers should be changed
++ * Returns pointer to the new head of the sorted list
+  */
+-void isort(node* list);
++node* isort(node* list);
+ 
+ /* Helper function to create a node */
+ node* create_node(int data);
+diff --git a/test_queue.c b/test_queue.c
+new file mode 100644
+index 0000000..8917589
+--- /dev/null
++++ b/test_queue.c
+@@ -0,0 +1,41 @@
++#include "exercise3.h"
++
++int main(void){
++
++queue *q;
++
++printf("\nTest 1: Queue empty on initialization");
++initialize(q);
++assert(empty(q));
++printf(" |PASS| \n");
++
++printf("\nTest 2: Enqueue then dequeue consitency");
++int x = 4;
++enqueue(q, x);
++int y = dequeue(q);
++assert(x == y);
++printf(" |PASS| \n");
++
++printf("\nTest 3: Enqueue enqueue then dequeue dequeue consitency");
++int x0 = 6;
++int x1 = 7;
++enqueue(q, x0);
++enqueue(q, x1);
++int y0 = dequeue(q);
++int y1 = dequeue(q);
++assert(x0 == y0);
++assert(x1 == y1);
++printf(" |PASS| \n");
++
++enqueue(q, x);
++enqueue(q, x0);
++enqueue(q, x1);
++
++printf("\nTest 4: Print\n");
++print_queue(q);
++printf("\n");
++
++while (!empty(q)) {dequeue(q);}
++
++return 0;
++}
+\ No newline at end of file
+diff --git a/tests/test_exercise2.c b/tests/test_exercise2.c
+index 8b9c064..61bc6d2 100644
+--- a/tests/test_exercise2.c
++++ b/tests/test_exercise2.c
+@@ -8,6 +8,8 @@
+ #include <stdbool.h>
+ #include "../include/exercise2.h"
+ 
++
++
+ /* Helper function to check if list is sorted */
+ bool is_sorted(node* list) {
+     if (list == NULL || list->next == NULL) {
+@@ -72,7 +74,7 @@ int main() {
+     node* list1 = create_list_from_array(arr1, 5);
+     printf("Before: ");
+     print_list(list1);
+-    isort(list1);
++    list1 = isort(list1);
+     printf("After:  ");
+     print_list(list1);
+     assert(is_sorted(list1) && "Test 1 failed: List should be sorted");
+@@ -87,7 +89,7 @@ int main() {
+     node* list2 = create_list_from_array(arr2, 5);
+     printf("Before: ");
+     print_list(list2);
+-    isort(list2);
++    list2 = isort(list2);
+     printf("After:  ");
+     print_list(list2);
+     assert(is_sorted(list2) && "Test 2 failed: List should remain sorted");
+@@ -102,7 +104,7 @@ int main() {
+     node* list3 = create_list_from_array(arr3, 5);
+     printf("Before: ");
+     print_list(list3);
+-    isort(list3);
++    list3 = isort(list3);
+     printf("After:  ");
+     print_list(list3);
+     assert(is_sorted(list3) && "List should be sorted");
+@@ -117,7 +119,7 @@ int main() {
+     node* list4 = create_list_from_array(arr4, 5);
+     printf("Before: ");
+     print_list(list4);
+-    isort(list4);
++    list4 = isort(list4);
+     printf("After:  ");
+     print_list(list4);
+     assert(is_sorted(list4) && "List should be sorted");
+@@ -132,7 +134,7 @@ int main() {
+     node* list5 = create_list_from_array(arr5, 2);
+     printf("Before: ");
+     print_list(list5);
+-    isort(list5);
++    list5 = isort(list5);
+     printf("After:  ");
+     print_list(list5);
+     assert(is_sorted(list5) && "List should be sorted");
+@@ -147,7 +149,7 @@ int main() {
+     node* list6 = create_list_from_array(arr6, 4);
+     printf("Before: ");
+     print_list(list6);
+-    isort(list6);
++    list6 = isort(list6);
+     printf("After:  ");
+     print_list(list6);
+     assert(is_sorted(list6) && "List should be sorted");

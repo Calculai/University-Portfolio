@@ -1,0 +1,46 @@
+﻿diff --git a/src/cloning_tank.cpp b/src/cloning_tank.cpp
+index eb84854..a6df5df 100644
+--- a/src/cloning_tank.cpp
++++ b/src/cloning_tank.cpp
+@@ -3,5 +3,10 @@
+ // Implement this:
+ void CloningTank::filter_op(std::vector<Monkey> &monkeys)
+ {
+-   
++    const std::size_t original_size = monkeys.size();
++    // index the original size of segment wished copied
++	for (std::size_t i = 0; i < original_size; ++i)
++	{
++		monkeys.push_back(monkeys[i]); // push a copy of each element to the back of the vector
++	}
+ }
+\ No newline at end of file
+diff --git a/src/feeder.cpp b/src/feeder.cpp
+index 39dcbd4..096edb5 100644
+--- a/src/feeder.cpp
++++ b/src/feeder.cpp
+@@ -3,4 +3,8 @@
+ // Implement this:
+ void Feeder::filter_op(std::vector<Monkey> &monkeys)
+ {
++    for (Monkey &monkey : monkeys) // range based for loop to feed each monkey
++    {
++        monkey.hunger_level -= 1; // lower hunger for each monkey
++    }
+ }
+\ No newline at end of file
+diff --git a/src/monkey_watcher.cpp b/src/monkey_watcher.cpp
+index b78e561..0a0d9b9 100644
+--- a/src/monkey_watcher.cpp
++++ b/src/monkey_watcher.cpp
+@@ -3,6 +3,10 @@
+ // Implement this:
+ void MonkeyWatcher::filter_op(std::vector<Monkey> &monkeys)
+ {
++    this->monkeys_seen.insert(this->monkeys_seen.end(), monkeys.begin(), monkeys.end());
++    // this implementation allows to call Monkeywatcher multiple times to accumulate monkeys
++    // alternatively. this->monkeys_seen = monkeys; would just overwrite the monkeys seen so far
++    // with the new monkeys this would be a different take if we want the watcher to forget
+ }
+ 
+ const std::vector<Monkey> &MonkeyWatcher::get_monkeys_seen() const

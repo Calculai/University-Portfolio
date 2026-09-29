@@ -1,0 +1,371 @@
+﻿diff --git a/exercise1.c b/exercise1.c
+index ef89b34..891921a 100644
+--- a/exercise1.c
++++ b/exercise1.c
+@@ -1,25 +1,67 @@
+-/*
+- * Exercise 1: Taylor Series Approximation for Sine Function
+- * Assignment 7 - IPFCE 2025
+- * 
+- * Implement the taylor_sine function that calculates the sine of x
+- * using Taylor series approximation with n terms.
+- * 
+- * Taylor series for sin(x) = x - x^3/3! + x^5/5! - x^7/7! + ...
+- */
+-
++#include <stdio.h>
++#include <assert.h>
+ #include "taylor_sine.h"
+ 
+-/* 
+- * Calculate sine using Taylor series approximation
+- * x: input value in radians
+- * n: number of terms in the series
+- * Returns: approximation of sin(x)
+- */
++static double fac(double x, int n);
++static double pot(double x, int n);
++
+ double taylor_sine(double x, int n) {
+-    // TODO: Implement the Taylor series approximation for sine
+-    // Hint: The series is: x - x^3/3! + x^5/5! - x^7/7! + ...
+-    // Use a loop to calculate n terms of the series
++    assert(n < 170); // Precondition
++    double result = x; // First term in the series is x
++    for (int i = 1; i < n; i++)
++    {
++        double sign = (i % 2) ? -1.0 : 1.0;
++        result += sign * pot(x,2*i+1) / fac(x,2*i+1);
++    }
++
++    /*
++    Ugly solution to small bug with calling function 
++    for same x twice in a row, effectively just reset
++    */
++    pot(x-1,1); 
++    fac(x-1,1);
++
++    return result; 
++}
++
++/*
++I made my own power and factorial function because I wanted
++to try out static variables and avoid using math.h since it
++is what we compare it to. 
++*/
++
++double fac(double x,int n){
++    static double result = 1;
++    static int count = 1;
++    static double last_x = 0.0;
++    if (x != last_x) {
++        result = 1.0;
++        count = 1;
++        last_x = x;
++    }
+     
+-    return 0.0; // placeholder - replace with your implementation
++    for (int i = count; i <= n; i++) 
++    {
++        result *= i;
++        count++;
++    }
++    return result;
++}
++
++double pot(double x, int n){
++    static double result = 1.0;
++    static int count = 0;
++    static double last_x = 0.0;
++    if (x != last_x) {
++        result = 1.0;
++        count = 0;
++        last_x = x;
++    }
++
++    for (int i = count; i < n; i++)
++    {
++        result = result * x;
++        count++;
++    }
++    return result;
+ }
+diff --git a/exercise2.c b/exercise2.c
+index 8c68533..baa7404 100644
+--- a/exercise2.c
++++ b/exercise2.c
+@@ -15,51 +15,82 @@
+  */
+ 
+ #include "stack.h"
++#include <assert.h>
+ 
+ /* Create an empty stack */
+ void initialize(stack *s)
+ {
+-    /* pre-condition: true */
++    s->head = NULL;
++
+     /* post-condition: stack is empty */
++    assert(empty(s));
+ }
+ 
+ /* Insert item x at the top of stack s */
+ void push(int x, stack *s)
+ {
+     /* pre-condition: true (linked list can always accept more items) */
+-    /* post-condition: x is added to top of stack */
++    node *temp = malloc(sizeof(node));
++    if (temp == NULL) {printf("Error: memory allocation failed\n"); return;}
++
++    temp->data = x;
++    temp->next = s->head;
++    s->head = temp;
+ 
++    /* post-condition: x is added to top of stack */
++    assert(s->head->data == x);
++    return;
+ }
+ 
+ /* Return (and remove) the top item of stack s */
+ int pop(stack *s)
+ {
+-  /* pre-condition: stack must not be empty */
+-  /* post-condition: top item is removed and returned */
++    /* pre-condition: stack must not be empty */
++    if (empty(s)){printf("No items to pop, stack is empty"); return 0;}
++    assert(!empty(s));
++
++    node *temp = s->head;
++    int out = s->head->data;
++    s->head = s->head->next;
++    free(temp);
+ 
+-  return 0; // placeholder - replace with actual implementation
++    /* post-condition: top item is removed and returned */
++    if (!empty(s)){assert(s->head->data != out);}
++    return out; 
+ }
+ 
+ /* Test whether a stack can accept more pushes */
+ bool full(stack *s)
+ {
+-    /* pre-condition: true */
+-    /* post-condition: Returns true if stack is full, false otherwise */
+-    return false;
++    return false; // Technically can be full if all memory is claimed but that is an unlikely case
+ }
+ 
+ /* Test whether a stack can accept more pops */
+ bool empty(stack *s)
+ {
+-    /* pre-condition: true */
+-    /* post-condition: returns true if stack is empty, false otherwise */
+-
+-    return false; // placeholder - replace with actual implementation
++    return (s->head == NULL);
+ }
+ 
+ /* Print the contents of the stack */
+ void print(stack *s)
+ {
+     /* pre-condition: true */
+-    /* post-condition: prints all items in the stack */
++
++    if (empty(s)){printf("No items to print, stack is empty"); return;}
++
++    node *temp = s->head;
++    int i = 1;
++    while (temp != NULL)
++    {
++        printf("(%d) %d | ",i ,temp->data);
++        temp = temp->next;
++        i++;
++    }
++    printf("\n");
++    /* post-condition: prints all items in the stack */ //Untestable outside visual confirmation
++    return;
++}
++
++void destroy_stack(stack *s){
++    while (s->head != NULL){pop(s);} return;
+ }
+diff --git a/include/stack.h b/include/stack.h
+index 8de0487..2a9a074 100644
+--- a/include/stack.h
++++ b/include/stack.h
+@@ -36,4 +36,7 @@ bool empty(stack *s);
+ /* Print the contents of the stack */
+ void print(stack *s);
+ 
++/* Cleans up stack made with malloc */
++void destroy_stack(stack *s);
++
+ #endif
+\ No newline at end of file
+diff --git a/include/taylor_sine.h b/include/taylor_sine.h
+index 9b52bbb..e993034 100644
+--- a/include/taylor_sine.h
++++ b/include/taylor_sine.h
+@@ -1,13 +1,7 @@
+-#ifndef _TAYLOR_SINE_H_
+-#define _TAYLOR_SINE_H_
++#ifndef TAYLOR_SINE_H
++#define TAYLOR_SINE_H
+ 
+-/*
+- * Taylor series approximation for sine function
+- * Exercise 1 - Assignment 7
+- * 
+- * TODO: Create the header file for the taylor_sine library
+- * - Include necessary header files
+- * - Declare the taylor_sine function
+- */
++// Function prototype for taylor_sine
++double taylor_sine(double x, int n);
+ 
+-#endif
+\ No newline at end of file
++#endif 
+diff --git a/test-stack.c b/test-stack.c
+new file mode 100644
+index 0000000..2cbf7b2
+--- /dev/null
++++ b/test-stack.c
+@@ -0,0 +1,41 @@
++#include <assert.h>
++#include "stack.h"
++
++int main(void){
++    stack* s;
++    int u, v;
++
++    initialize(s);
++    // Function checks for empty as post condition so not nessecery
++
++    v = 3;
++    push(v,s);
++    u = pop(s);
++    assert(v == u);
++    printf("Test 1 succesful: Consistency through 1 push and pop\n");
++
++    assert(empty(s));
++    push(1,s);
++    assert(!empty(s));
++    push(2,s);
++    assert(!empty(s));
++    assert(!full(s));
++    push(3,s);
++    push(4,s);
++    print(s);
++    printf("Test 2 succesful: Print works\n");
++
++    int v0 = 3;
++    int v1 = 2;
++    push(v0,s);
++    push(v1,s);
++    int u0 = pop(s);
++    int u1 = pop(s);
++
++    assert(v0 == u1);
++    assert(v1 == u0);
++    printf("Test 3 succesful: 2 push then pop\n");
++
++    destroy_stack(s);
++    assert(empty(s));
++}
+\ No newline at end of file
+diff --git a/test-taylor.c b/test-taylor.c
+new file mode 100644
+index 0000000..351ccac
+--- /dev/null
++++ b/test-taylor.c
+@@ -0,0 +1,87 @@
++#include <stdio.h>
++#include <assert.h>
++#include <math.h>
++#include <stdlib.h>
++#include "taylor_sine.h"
++
++#define M_PI 3.14159265358979323846
++
++void comparesine(double x, int n);
++void comparetable(int n);
++
++int main(void) {
++
++    comparetable(4);
++    comparetable(10);
++    comparetable(30);
++    comparetable(100);
++
++    /*
++    So from the tests negative numbers seems to have no impact on
++    the results accuracy, the only two values that are important
++    are the x value and the amount of terms. This holds true for
++    the mathematical model as well so is not an issue with 
++    implementation
++
++    This can also be seen in the test by examining the last test
++    case because for the rest 40 is outside the range [-1000,1000] 
++    but with 100 terms the precision of the model increases, but 
++    the extra terms actually increase the value so far that it 
++    reaches the limit of doubles. This is because it is more 
++    unstable at far away values due to the polynomial nature of the 
++    approximation.
++    */ 
++
++    return 0;
++}
++
++
++void comparesine(double x, int n) {
++
++    // Calculate Taylor sine approximation
++    double sine_approx = taylor_sine(x, n);
++
++    // Calculate actual sine value
++    double sine_actual = sin(x);
++    
++    // Calculate error
++    double error = fabs(sine_approx - sine_actual);
++
++    /*
++    // Since sine is [-1,1] any value outside is a bad approximation,
++    so to show reasonable error but avoid fomratting issue a range 
++    was chosen.
++    */
++    if (sine_approx>1000 || sine_approx<-1000) 
++    {
++        printf("%12.4lf | Aproximation outside of range\n", 
++           x);   
++        return;
++    }
++    
++   
++    printf("%12.4lf | %14.8lf | %14.8lf | %14.8lf | %6d\n", 
++           x, sine_approx, sine_actual, error, n);
++    
++    return;
++}
++
++void comparetable(int n){
++    
++    printf("\n%12s | %14s | %14s | %14s | %6s\n", 
++           "X value", "Approx.", "Actual", "Error", "Terms");
++    printf("-------------------------------------------------------------------------\n");
++
++   
++    comparesine(4.0, n);
++    comparesine(M_PI, n);
++    comparesine(-M_PI, n);
++    comparesine(7.0, n);
++    comparesine(-7.0, n);
++    comparesine(3*M_PI, n);
++    comparesine(34.0, n);
++    comparesine(40, n);
++
++
++    printf("\n");
++}
+\ No newline at end of file

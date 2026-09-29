@@ -1,0 +1,85 @@
+formula:
+v(g) = E - N + 2
+E(edges)
+N(nodes)
+Note: Nested function calls (binary_search, binary_insert, insert) are treated as single nodes
+
+counting:
+v(g) = decision points + 1
+
+min:
+formula:
+E = 8
+N = 7
+v(g) = 8 - 7 + 2 = 3
+counting:
+for 1
+if 2
+v(g) = 2 + 1
+paths:
+1. Start -> Init -> Loop (false) -> End
+2. Start -> Init -> Loop (true) -> Get v -> If (false) -> nothing -> Loop (false) -> End
+3. Start -> Init -> Loop (true) -> Get v -> If (true) -> Assign -> Loop (false) -> End
+v(g) = amount of paths = 3
+
+insert:
+formula:
+E = 5
+N = 5
+v(g) = 5 - 5 + 2 = 2
+counting:
+if 1
+v(g) = 1 + 1 = 2
+paths:
+1. Start -> if (TRUE) -> insert -> END
+2. Start -> if (FALSE) -> binary_insert(input) -> END
+v(g) = amount of paths = 2
+
+contains:
+formula:
+E = 5
+N = 5
+v(g) = 5 - 5 + 2 = 2
+counting:
+if 1
+v(g) = 1 + 1 = 2
+paths:
+1. Start -> if (TRUE) -> Return false -> END
+2. Start -> if (FALSE) -> Return binary_search(input) -> END
+v(g) = amount of paths = 2
+
+binary search: 
+(note: function called is only one node)
+formula:
+E = 12
+N = 10
+v(g) = 12 - 10 + 2 = 4
+counting:
+if 1
+if 2
+if 3
+v(g) = 3 + 1 = 4
+paths:
+1. Start -> base case (TRUE) -> Return {} -> End
+2. Start -> base case (FALSE) -> value == mid (TRUE) -> Return mid -> End
+3. Start -> base case (FALSE) -> value == mid (FALSE) -> value < mid (TRUE) -> binary_search(left) -> Start
+4. Start -> base case (FALSE) -> value == mid (FALSE) -> value < mid (FALSE) -> binary_search(right) -> Start
+v(g) = amount of paths = 4
+
+binary insert:
+(note: function called is only one node)
+formula:
+E = 12
+N = 10
+v(g) = 12 - 10 + 2 = 4
+counting:
+if 1
+if 2
+if 3
+v(g) = 3 + 1 = 4
+paths:
+1. Start -> start != end-1 (FALSE) -> value < *start (TRUE) -> insert at start -> End
+2. Start -> start != end-1 (FALSE) -> value < *start (FALSE) -> insert at start + 1 -> End
+3. Start -> start != end-1 (TRUE) -> value < mid (TRUE) -> binary_insert(left) -> Start
+4. Start -> start != end-1 (TRUE) -> value < mid (FALSE) -> value > mid (TRUE) -> binary_insert(right) -> Start
+v(g) = amount of paths = 4

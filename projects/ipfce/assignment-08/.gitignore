@@ -1,0 +1,23 @@
+# Compiled output
+*.o
+*.out
+*.exe
+tests/test_exercise2
+tests/test_exercise3
+tests/test_exercise4
+tests/test_output_*.txt
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Numerical Linear Algebra | Project Guide</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #20292d;
+      --muted: #53636a;
+      --paper: #f5f7f5;
+      --line: #d5dfda;
+      --given: #dcefe3;
+      --given-ink: #174e32;
+      --work: #dceaf5;
+      --work-ink: #174565;
+      --support: #e9eceb;
+      --support-ink: #465154;
+      --accent: #b6492d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.6 Georgia, "Times New Roman", serif;
+    }
+    main { width: min(960px, calc(100% - 36px)); margin: 0 auto; padding: 48px 0 72px; }
+    header { border-bottom: 3px solid var(--ink); padding-bottom: 28px; margin-bottom: 28px; }
+    .eyebrow { color: var(--accent); font: 700 12px/1.4 "Segoe UI", sans-serif; letter-spacing: 1px; text-transform: uppercase; }
+    h1 { font-size: clamp(34px, 6vw, 58px); line-height: 1.05; margin: 12px 0; max-width: 720px; }
+    h2 { font-size: 25px; line-height: 1.2; margin: 0 0 10px; }
+    p { margin: 8px 0 14px; }
+    .intro { max-width: 760px; font-size: 19px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 9px; margin: 20px 0 10px; font: 600 13px/1.4 "Segoe UI", sans-serif; }
+    .tag { display: inline-block; padding: 3px 9px; border-radius: 3px; }
+    .given { background: var(--given); color: var(--given-ink); }
+    .work { background: var(--work); color: var(--work-ink); }
+    .support { background: var(--support); color: var(--support-ink); }
+    .notice { border-left: 4px solid var(--accent); background: #fff; padding: 12px 16px; color: var(--muted); font: 14px/1.55 "Segoe UI", sans-serif; }
+    nav { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 22px 0 34px; font: 600 14px "Segoe UI", sans-serif; }
+    a { color: #125477; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: var(--accent); }
+    .entry { padding: 23px 0 24px; border-top: 1px solid var(--line); }
+    .entry p { max-width: 800px; }
+    .entry .tag { font: 600 11px/1.4 "Segoe UI", sans-serif; vertical-align: 2px; }
+    .links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; font: 600 14px "Segoe UI", sans-serif; }
+    .result { color: var(--muted); }
+    footer { border-top: 1px solid var(--line); margin-top: 30px; padding-top: 20px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 560px) { main { width: min(100% - 24px, 960px); padding-top: 28px; } .intro { font-size: 17px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Numerical Linear Algebra · Project Guide</div>
+    <h1>From vectors to models</h1>
+    <p class="intro">A guided map through the numerical methods explored in these homework submissions. Start with the question and the method; open the implementation only when you want the details.</p>
+    <div class="legend" aria-label="Contribution color key">
+      <span class="tag given">Assignment context</span>
+      <span class="tag work">Implementation in this submission</span>
+      <span class="tag support">Explanation, plotting, or reporting</span>
+    </div>
+    <p class="notice"><strong>How to read the colors:</strong> the green label marks problem data, assumptions, or requirements identifiable from the submission; blue marks the solution method implemented in the current files; gray marks supporting presentation or diagnostics. There is no original starter-code snapshot for this folder, so these labels are a guided summary, not a verified line-by-line diff of instructor code versus student code.</p>
+    <p class="notice"><strong>Execution check:</strong> all eight available homework scripts completed successfully in the portfolio copy. This folder has no supplied automated test suite; these are smoke checks, not unit-test results.</p>
+  </header>
+
+  <nav aria-label="Homework navigation">
+    <a href="#hw1">HW 1</a><a href="#hw2">HW 3</a><a href="#hw3">HW 4</a><a href="#hw4">HW 5</a><a href="#hw5">HW 7</a><a href="#hw6">HW 8</a><a href="#hw7">HW 10</a><a href="#hw9">HW 12</a>
+  </nav>
+
+  <section class="entry" id="hw1">
+    <h2>HW 1 · Vector chains and rotations</h2>
+    <p><span class="tag given">Assignment context</span> A planar arm is represented by connected vectors, and selected segments are rotated.</p>
+    <p><span class="tag work">Implementation</span> Builds the segment vectors from points, sums them to recover the endpoint, and applies rotation matrices to compare rotating a terminal segment with rotating a downstream chain.</p>
+    <p><span class="tag support">Presentation</span> Uses labeled vector plots to make the geometry and changed endpoint visible.</p>
+    <div class="links"><a href="projects/numerical-linear-algebra/hi1/doc1.py">Open solution script</a><a href="projects/numerical-linear-algebra/hi1/vectors_01.png">View original vectors</a><a href="projects/numerical-linear-algebra/hi1/vectors_02.png">View terminal-segment rotation</a><a href="projects/numerical-linear-algebra/hi1/vectors_03.png">View first-link rotation</a><a href="projects/numerical-linear-algebra/hi1/vectors_04.png">View chain rotation</a><a href="projects/numerical-linear-algebra/hi1/vectors_05.png">View bend order A then C</a><a href="projects/numerical-linear-algebra/hi1/vectors_06.png">View bend order C then A</a></div>
+  </section>
+
+  <section class="entry" id="hw2">
+    <h2>HW 3 · Smoothing a noisy signal</h2>
+    <p><span class="tag given">Assignment context</span> Starts from a sampled trigonometric signal, adds normally distributed noise, and compares two banded smoothing matrices.</p>
+    <p><span class="tag work">Implementation</span> Constructs the diagonal matrices, applies them to the noisy samples, and compares errors over repeated noise trials.</p>
+    <p><span class="tag support">Presentation</span> Optional plots show the signal before and after smoothing; error summaries compare the methods quantitatively.</p>
+    <div class="links"><a href="projects/numerical-linear-algebra/hi2/comp.py">Open combined solution</a><a href="projects/numerical-linear-algebra/hi2/figure1_signal.pdf">View clean signal</a><a href="projects/numerical-linear-algebra/hi2/figure2_noisy.pdf">View noisy signal</a><a href="projects/numerical-linear-algebra/hi2/figure3_A.pdf">View matrix A result</a><a href="projects/numerical-linear-algebra/hi2/figure4_B.pdf">View matrix B result</a></div>
+  </section>
+
+  <section class="entry" id="hw3">
+    <h2>HW 4 · Polynomial interpolation</h2>
+    <p><span class="tag given">Assignment context</span> Uses measured points to study polynomial fits and piecewise cubic interpolation.</p>
+    <p><span class="tag work">Implementation</span> Evaluates polynomials, searches for the smallest exact degree, solves an augmented system by row operations, and adds a derivative constraint to select a unique piecewise solution.</p>
+    <p><span class="tag support">Presentation</span> Separate plots compare the data with quadratic, global, and piecewise fits.</p>
+    <div class="links"><a href="projects/numerical-linear-algebra/hi3/comp.py">Open combined solution</a><a href="projects/numerical-linear-algebra/hi3/part_a_data.pdf">View measured data</a><a href="projects/numerical-linear-algebra/hi3/part_b_quadratic.pdf">View quadratic fit</a><a href="projects/numerical-linear-algebra/hi3/part_c_global_poly.pdf">View global polynomial</a><a href="projects/numerical-linear-algebra/hi3/part_d_two_part_piecewise_cubic.pdf">View piecewise cubic</a><a href="projects/numerical-linear-algebra/hi3/part_f_piecewise_unique.pdf">View unique constrained fit</a></div>
+  </section>
+
+  <section class="entry" id="hw4">
+    <h2>HW 5 · Projection and orthogonality</h2>
+    <p><span class="tag given">Assignment context</span> Tests whether vectors are orthogonal and studies projection onto their span.</p>
+    <p><span class="tag work">Implementation</span> Forms the Gram matrix, computes projection coefficients, finds the residual, checks its orthogonality, and normalizes the resulting vectors.</p>
+    <p><span class="tag support">Presentation</span> Part switches control which matrix and orthogonality checks are printed; this submission records the numeric results in the console rather than saving a plot.</p>
+    <div class="links"><a href="projects/numerical-linear-algebra/hi4/comp.py">Open solution script</a><a href="projects/numerical-linear-algebra/hi4/">Browse HW 5 folder</a></div>
+  </section>
+
+  <section class="entry" id="hw5">
+    <h2>HW 7 · Singular value decomposition</h2>
+    <p><span class="tag given">Assignment context</span> Rotates and samples a figure-eight curve, adds noise, and examines the centered data.</p>
+    <p><span class="tag work">Implementation</span> Centers the samples, computes the SVD, checks orthogonality of the left singular vectors, and rotates the data into principal coordinates for an alignment-error measure.</p>
+    <p><span class="tag support">Results</span> Existing images show the generated curve, noisy samples, and before/after alignment.</p>
+    <div class="links"><a href="projects/numerical-linear-algebra/hi5/comp.py">Open combined solution</a><a href="projects/numerical-linear-algebra/hi5/part_a.png">View generated curve</a><a href="projects/numerical-linear-algebra/hi5/part_b.png">View rotated curve</a><a href="projects/numerical-linear-algebra/hi5/part_c.png">View noisy samples</a><a href="projects/numerical-linear-algebra/hi5/part_g_before_after.png">View alignment result</a></div>
+  </section>
+
+  <section class="entry" id="hw6">
+    <h2>HW 8 · Best approximation in a function space</h2>
+    <p><span class="tag given">Assignment context</span> Approximates a target function with a span of basis functions over an interval.</p>
+    <p><span class="tag work">Implementation</span> Approximates inner products numerically with the trapezoidal rule, forms the Gram system, solves for projection coefficients, and measures approximation error.</p>
+    <p><span class="tag support">Results</span> The saved figure places the target function beside its computed approximation.</p>
+    <div class="links"><a href="projects/numerical-linear-algebra/hi6/part_d.py">Open solution script</a><a href="projects/numerical-linear-algebra/hi6/part_d.png">View approximation result</a></div>
+  </section>
+
+  <section class="entry" id="hw7">
+    <h2>HW 10 · Least-squares illumination design</h2>
+    <p><span class="tag given">Assignment context</span> Models illumination across a parking lot from a fixed set of lamps and targets a specified light level.</p>
+    <p><span class="tag work">Implementation</span> Builds the coefficient matrix with NumPy broadcasting, implements modified Gram–Schmidt QR and back-substitution, then solves and compares the least-squares problem using QR and SVD.</p>
+    <p><span class="tag support">Results</span> Heatmaps show predicted illumination and deviations for both numerical methods.</p>
+    <div class="links"><a href="projects/numerical-linear-algebra/hi7/comp.py">Open combined solution</a><a href="projects/numerical-linear-algebra/hi7/part_b_heatmap.png">View initial heatmap</a><a href="projects/numerical-linear-algebra/hi7/part_d_deviation_comparison.png">View QR/SVD comparison</a><a href="projects/numerical-linear-algebra/hi7/part_d_qr_illumination.png">View QR illumination</a><a href="projects/numerical-linear-algebra/hi7/part_d_svd_illumination.png">View SVD illumination</a></div>
+  </section>
+
+  <section class="entry" id="hw9">
+    <h2>HW 12 · Coupled mixing tanks</h2>
+    <p><span class="tag given">Assignment context</span> Models salt moving between two constant-volume tanks with specified flows and initial concentrations.</p>
+    <p><span class="tag work">Implementation</span> Derives the flow balance and matrix ODE, computes eigenpairs and initial coefficients, evaluates the trajectory, and obtains the long-term concentration ratio from the dominant eigenvector.</p>
+    <p><span class="tag support">Results</span> Existing figures show the system construction and the simulated tank trajectories.</p>
+    <div class="links"><a href="projects/numerical-linear-algebra/hi9/comp.py">Open combined solution</a><a href="projects/numerical-linear-algebra/hi9/figures/part_c_output.png">View part C output</a><a href="projects/numerical-linear-algebra/hi9/figures/part_d_output.png">View part D output</a><a href="projects/numerical-linear-algebra/hi9/figures/part_e.png">View trajectory result</a></div>
+  </section>
+
+  <footer>
+    <p>Each folder contains the available solution scripts and selected generated results. The assignment handouts and the separate <code>hi1/snippets</code> LaTeX-formatting helpers are intentionally not part of this portfolio copy.</p>
+    <p>For detailed attribution, use the visible task labels and implementation descriptions as a reading guide, not as proof of an exact starter-code diff.</p>
+  </footer>
+</main>
+</body>
+</html>

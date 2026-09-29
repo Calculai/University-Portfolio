@@ -1,0 +1,285 @@
+﻿diff --git a/include/dict.hpp b/include/dict.hpp
+index e414023..12bf6cc 100644
+--- a/include/dict.hpp
++++ b/include/dict.hpp
+@@ -4,6 +4,7 @@
+ #include <tuple>
+ #include <iterator>
+ #include <optional>
++#include <iostream>
+ 
+ /**
+  * @brief Container used to store assoicate keys with values.
+@@ -15,6 +16,9 @@
+ template <class K, class V>
+ class Dict
+ {
++private:
++    std::vector<K> keys_;
++    std::vector<V> val_;
+ 
+ public:
+     /**
+@@ -26,6 +30,31 @@ public:
+      */
+     void set(K key, V val)
+     {
++        // check if key is in dictionary
++        std::cout << "checking if " << key << " is already in dictionary....\n";
++
++        // loop through dictionary log position via itterator int i
++        for (int i = 0; i < keys_.size(); i++) {
++            // if found overwrite value
++            if (keys_[i] == key) {
++                std::cout << key << " already in dictionary, overwriting " << val_[i] << " with " << val << "\n";
++                val_[i] = val;
++                return;
++            }
++        }
++
++        // add key to list of keys along with val to list of values
++        std::cout << key << " not found in dictionary, adding " << key << " to dictionary...\n";
++        keys_.push_back(key);
++        val_.push_back(val);
++
++        // confirm whether it succesfully added the key
++        if (!has(key))
++        {
++            std::cout << "failed to add " << key << " to dictionary\n";
++            return;
++        }
++        std::cout << key << " added to dictionary\n";
+     }
+ 
+     /**
+@@ -37,6 +66,14 @@ public:
+      */
+     bool has(K key) const
+     {
++        // loop through the keys vector and if key matches return true
++        for (int i = 0; i < keys_.size(); i++) {
++            if (keys_[i] == key) {
++                return true;
++            }
++        }
++
++        // base case return false
+         return false;
+     }
+ 
+@@ -47,7 +84,9 @@ public:
+      */
+     size_t len()
+     {
+-        return 0;
++        std::cout << "Length of dictionary: " << keys_.size() << "\n";
++        // use vector class size function
++        return keys_.size();
+     }
+ 
+     /**
+@@ -59,7 +98,18 @@ public:
+      */
+     std::optional<V> get(K key) const
+     {
+-        return {};
++        std::cout << "checking for " << key << " in dictionary....\n";
++        // loop through vector and return value if found
++        for (int i = 0; i < keys_.size(); i++) {
++            if (keys_[i] == key) {
++                std::cout << key << " found!\n";
++                return val_[i];
++            }
++        }
++
++        // if not found return nullopt
++        std::cout << "key not in dictionary\n";
++        return std::nullopt;
+     }
+ 
+     /**
+@@ -72,6 +122,31 @@ public:
+      */
+     void del(K key)
+     {
++        // these messages are potentially unneeded overhead but I am practicing adding
++        // these types for user clarity. Can easily be removed for potential reduciton
++        // in overhead if needed
++
++        // loops through the key list
++        for (int i = 0; i < keys_.size(); i++) {
++            if (keys_[i] == key) {
++                std::cout << key << " found removing from dictionary....\n";
++
++                // using erase to remove and shrink dictionary
++                keys_.erase(keys_.begin()+i);
++                val_.erase(val_.begin()+i);
++
++                // check if removed succesfully
++                if (!(has(key))) {
++                    std::cout << key << " removed successfully!\n";
++                    return;
++                }
++                // in case not inform user
++                std::cout << key << "failed to remove key\n";
++                return;
++            }
++        }
++        // inform user that key is not in dictionary
++        std::cout << key << " not in dictionary\n";
+     }
+ 
+     /**
+@@ -81,7 +156,16 @@ public:
+      */
+     std::vector<K> keys()
+     {
+-        return {};
++        std::cout << "Current keys in the dictionary:\n";
++        for (int i = 0; i < keys_.size(); i++) {
++            std::cout << keys_[i] << "\n";
++        }
++        // again not needed but added for user clarity, can be removed if needed for reduction in overhead
++
++        // we have our vector of just keys already so just return it
++        return keys_;
++
++        // if I went with the linked list implementation I would have had to make a new vector for it
+     }
+ 
+     /**
+@@ -91,6 +175,12 @@ public:
+      */
+     std::vector<V> values()
+     {
+-        return {};
++        std::cout << "Current values in the dictionary:\n";
++        for (int i = 0; i < val_.size(); i++) {
++            std::cout << val_[i] << "\n";
++        }
++
++        // we have our vector of just values already so just return it
++        return val_;
+     }
+ };
+\ No newline at end of file
+diff --git a/tests/src/test_dict.cpp b/tests/src/test_dict.cpp
+index 89fb0af..02721fa 100644
+--- a/tests/src/test_dict.cpp
++++ b/tests/src/test_dict.cpp
+@@ -3,26 +3,97 @@
+ #include "dict.hpp"
+ #include <string>
+ 
++/*
++The tests verify all required Dict functionality from the assignment
++Running with `ctest --verbose` shows branch-specific print output for all normal/reachable paths
++My failure condition branches are not realistically reachable in normal execution but also unlikely
++to ever occur so I will take this as good enough branch coverage
++*/
++
+ using Catch::Matchers::UnorderedEquals;
+ 
+ TEST_CASE("Test Dict")
+ {
+-    // Implement your own tests. You can use below as a reference.
+-    // When implementing tests, think of the edge cases where you
+-    // suspect the program is likely to fail.
+-    // For example inserting the 'same' person twice or removing an
+-    // non existent person from the dictionary.
+-    Dict<std::string, int> name_to_age;
+-
+-    REQUIRE(name_to_age.len() == 0);
+-
+-    name_to_age.set("Jane", 20);
+-    REQUIRE(name_to_age.len() == 1);
+-    REQUIRE(name_to_age.has("Jane"));
+-    REQUIRE(name_to_age.get("Jane").has_value());
+-    REQUIRE(name_to_age.get("Jane").value() == 20);
+-    REQUIRE_THAT(name_to_age.keys(), UnorderedEquals(std::vector<std::string>{"Jane"}));
+-    REQUIRE_THAT(name_to_age.values(), UnorderedEquals(std::vector<int>{20}));
+-
+-    name_to_age.set("Tarzan", 25);
++    // I copied in specification so that I can base test off it to insure software meets requirements (***** denotes requirements)
++
++    // Associates the key with the specified value. *****
++    Dict<std::string, int> database;
++
++    std::string s = "Ch852";
++    int i = 2026;
++    database.set(s, i);
++
++    // make sure that the key is associated with the value in the dictionary
++    REQUIRE(database.get(s).value() == i);
++
++    // If the key is already in the dictionary its value is overwritten. *****
++    int new_i = 2027;
++    database.set(s, new_i);
++    REQUIRE(database.get(s).value() == new_i);
++
++
++    // Determines if the key is defined in the dictionary. *****
++    // Return true if the key is defined in the dictionary. *****
++    // Return false otherwise. *****
++
++    // Needs to be true since we know the key is in the dictionary
++    REQUIRE(database.has(s));
++
++    // Return false since we know this key is not in the dictionary
++    REQUIRE_FALSE(database.has("random key"));
++
++    // Add another to the list just to make it longer
++    std::string d = "AL964";
++    int g = 293026;
++    database.set(d, g);
++
++    // Returns the number of items in the dictionary. *****
++
++    // We added two items so far so the length should be 2
++    REQUIRE(database.len() == 2);
++
++    // Get the value associated with the specified key. *****
++
++    // s has the value new_i so we require that association
++    REQUIRE(database.get(s).value() == new_i);
++
++    // If no value is found std::nullopt is returned. *****
++
++    // If we try to get something from a nonexistent key we should get nullopt
++    REQUIRE(database.get("nonexistent key") == std::nullopt);
++
++    // Delete the specified key and its associated value from the dictionary. *****
++
++    // Require that key s is in the dictionary before deletion
++    REQUIRE(database.has(s));
++    // Delete it
++    database.del(s);        
++    // Require that key s is not in the dictionary after deletion and then try to get the value from key s which should give nullopt
++    REQUIRE_FALSE(database.has(s));
++    REQUIRE(database.get(s) == std::nullopt);
++
++    // If the key is not present in the dictionary, nothing happens. *****
++    database.del("imaginary key");  
++    // My cout will inform us what happens cant require this test
++
++    std::string t = "Ch6572";
++    int h = 9999;
++    database.set(t, h);
++
++    // List all keys of the dictionary. *****
++
++    // Use the fuction and then require that the list of keys are the two surviving keys in the dictionary
++    auto keylist = database.keys();
++    REQUIRE_THAT(keylist, UnorderedEquals(std::vector<std::string>{"AL964", "Ch6572"}));
++
++
++    // List all values of the dictionary. *****
++
++    // same thing as above
++    auto vallist = database.values();
++    REQUIRE_THAT(vallist, UnorderedEquals(std::vector<int>{293026, 9999}));
++
++
++    
++
+ }

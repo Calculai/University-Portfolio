@@ -1,0 +1,324 @@
+﻿diff --git a/solution/Abs_ShoeShop.c b/solution/Abs_ShoeShop.c
+new file mode 100644
+index 0000000..3fec8f0
+--- /dev/null
++++ b/solution/Abs_ShoeShop.c
+@@ -0,0 +1,74 @@
++#include "Abs_ShoeShop.h"
++#include <stdlib.h>
++
++// forward declarations of ShoeShop-specific functions
++// all of them static because user is supposed to use 
++// the shop struct and its function pointers
++static void ShoeShop_add_items(Shop* self, int row, int num);
++static int ShoeShop_in_stock(Shop* self, int row);
++static int ShoeShop_count_items(Shop* self);
++static bool ShoeShop_clear(Shop* self, int row);
++static void ShoeShop_destroy(Shop* self);
++
++// constructor equivalent 
++ShoeShop* ShoeShop_create(int size) {
++	// allocated memory for the whole struct, including the base Shop struct
++	ShoeShop* shoe_shop = (ShoeShop*)malloc(sizeof(ShoeShop));
++	// initialize shelves to 0
++	shoe_shop->shelf = (int*)calloc(size, sizeof(int));
++	// set the size of the shoe shop
++	shoe_shop->size = size;
++	
++	// initialize function pointers in the base Shop struct
++	shoe_shop->base.add_items = ShoeShop_add_items;
++	shoe_shop->base.in_stock = ShoeShop_in_stock;
++	shoe_shop->base.count_items = ShoeShop_count_items;
++	shoe_shop->base.clear = ShoeShop_clear;
++	shoe_shop->base.destroy = ShoeShop_destroy;
++	/* 
++	now when we call shop.add_items(Shop*, int, int) it will 
++	call ShoeShop_add_items with the correct self pointer
++	making it work without needingnto know it is a shoeshop
++	*/
++
++	return shoe_shop;
++	// we return the shoe_shop struct pointer which includes our functions and relvant data
++}
++
++static void ShoeShop_add_items(Shop* self, int row, int num) {
++	((ShoeShop*)self)->shelf[row] += num;
++	/*
++	notable the self pointer we pass around is of type Shop*
++	so we need to case it to ShoeShop* to access shoe shop specific data
++	this isn't an issue since we allocate the correct type in the create function
++	so malloc will take care of the space for us 
++	*/
++}
++
++static int ShoeShop_in_stock(Shop* self, int row) {
++	return ((ShoeShop*)self)->shelf[row] > 0;
++	// again returns true or false formatted as int
++}
++
++static int ShoeShop_count_items(Shop* self) {
++	int tot = 0;
++	for (int k = 0; k < ((ShoeShop*)self)->size; k++) {
++		tot += ((ShoeShop*)self)->shelf[k];
++	}
++	// uses the size we set to loop through all shelves and add them together
++	return tot;
++}
++
++static bool ShoeShop_clear(Shop* self, int row) {
++	bool rem = ((ShoeShop*)self)->shelf[row] > 0;
++	((ShoeShop*)self)->shelf[row] = 0;
++	return rem; // return true if the item was cleared (i.e., was in stock before clearing)
++}
++
++static void ShoeShop_destroy(Shop* self) {
++	if (((ShoeShop*)self) != NULL) {
++		free(((ShoeShop*)self)->shelf);
++		free(((ShoeShop*)self));
++	}
++	// we only allocated memory for the ShoeShop struct and its shelf, so free those (order matters)
++}
+diff --git a/solution/Abs_ShoeShop.h b/solution/Abs_ShoeShop.h
+new file mode 100644
+index 0000000..24cfce8
+--- /dev/null
++++ b/solution/Abs_ShoeShop.h
+@@ -0,0 +1,15 @@
++#ifndef SHOESHOP_H
++#define SHOESHOP_H
++
++#include "Abs_Shop.h"
++
++typedef struct {
++	Shop base;  // inherit from Shop (must be first member so we can cast between Shop* and ShoeShop*)
++	int* shelf;
++	int size;
++} ShoeShop;
++
++// constructor equivalent - create and initialize a ShoeShop
++ShoeShop* ShoeShop_create(int size);
++
++#endif
+diff --git a/solution/Abs_Shop.h b/solution/Abs_Shop.h
+new file mode 100644
+index 0000000..3dc26d1
+--- /dev/null
++++ b/solution/Abs_Shop.h
+@@ -0,0 +1,25 @@
++#ifndef SHOP_H
++#define SHOP_H
++
++#include <stdbool.h>
++
++typedef struct Shop {
++	// function pointers for virtual methods
++
++	// add items to a specific row
++	void (*add_items)(struct Shop* self, int row, int num);
++	// check if items are in stock at a specific row
++	int (*in_stock)(struct Shop* self, int row);
++	// count total items in the shop
++	int (*count_items)(struct Shop* self);
++	// clear items from a specific row, returns true if row had items
++	bool (*clear)(struct Shop* self, int row);
++	// destructor equivalent - free memory
++	void (*destroy)(struct Shop* self);
++
++	/* when shop is created the struct can be called with 
++	the function pointers to perform functions independant 
++	of the specifics of the shoe shop implementation */
++} Shop;
++
++#endif
+diff --git a/solution/Abs_main.c b/solution/Abs_main.c
+new file mode 100644
+index 0000000..a37ff98
+--- /dev/null
++++ b/solution/Abs_main.c
+@@ -0,0 +1,45 @@
++#include "Abs_ShoeShop.h"
++#include <stdio.h>
++
++int main() {
++	// I added print statements to make it clearer what is happening
++	// when testing the program
++	printf("Creating a ShoeShop with polymorphism...\n");  
++	ShoeShop* shoeshop = ShoeShop_create(2);
++	
++	printf("Casting ShoeShop to Shop pointer...\n");  
++	Shop* shop = (Shop*)shoeshop;
++	// since the first member of ShoeShop is Shop we can safely cast between the two types
++
++	/*
++	above is the intial work we need to do to set up polymorphism in C
++	below the implementation works independant of the specific shop type
++	we could create a shop called BookShop that also inherits from Shop
++	and use the same code below to interact with it without changing anything
++
++	this is the power of polymorphism
++	*/
++
++	
++	printf("Adding 2 items to shelf 0 (via Shop pointer)\n"); 
++	shop->add_items(shop, 0, 2);
++	printf("Adding 3 items to shelf 1 (via Shop pointer)\n"); 
++	shop->add_items(shop, 1, 3);
++	
++	int tot = shop->count_items(shop);
++	printf("Total items in shop: %d\n", tot);  
++	
++	if (tot > 0) {
++		printf("Clearing shelf 0 - in stock: %d\n", shop->clear(shop, 0));  
++		printf("Clearing shelf 1 - in stock: %d\n", shop->clear(shop, 1));  
++	}
++	
++	int tot_after = shop->count_items(shop);
++	printf("Total items after clearing: %d\n", tot_after); 
++	
++	printf("Destroying shop...\n");  
++	shop->destroy(shop);
++	printf("Done!\n");  
++	
++	return 0;
++}
+diff --git a/solution/Org_ShoeShop.c b/solution/Org_ShoeShop.c
+new file mode 100644
+index 0000000..c7d02c6
+--- /dev/null
++++ b/solution/Org_ShoeShop.c
+@@ -0,0 +1,56 @@
++#include "Org_ShoeShop.h"
++#include <stdlib.h>
++
++ShoeShop* ShoeShop_create(int size) {
++	// allocated memory for called amount of shelves
++	ShoeShop* shop = (ShoeShop*) malloc(sizeof(ShoeShop));
++	
++	// initialize shelves to 0
++	shop->shelf = (int*)calloc(size, sizeof(int));
++	
++	// set the size of the shoe shop
++	shop->size = size;
++
++	// return shop pointer to caller
++	return shop;
++}
++
++void ShoeShop_destroy(ShoeShop* shop) {
++	// free allocated memory for shelves and shop struct
++	if (shop != NULL) {
++		free(shop->shelf);
++		free(shop);
++	}
++	// important to start with shelf since shop is our only access to shelf
++}
++
++void ShoeShop_add_items(ShoeShop* shop, int row, int num) {
++	shop->shelf[row] += num;
++	/* add item amount to existing amount on shelf (are these 
++	types of comments relevant? seems pretty self-explanatory 
++	but nothing else to comment on for this function) */
++}
++
++int ShoeShop_in_stock(ShoeShop* shop, int row) {
++	return shop->shelf[row] > 0;
++	/* return true if shelf has items, false if shelf is empty
++	not formatted as bool since the provided functions didn't 
++	use bool return type, but the logic is the same */
++}
++
++int ShoeShop_count_items(ShoeShop* shop) {
++	// uses stored size to loop through all shelves and add them together
++	int tot = 0;
++	for (int k = 0; k < shop->size; k++) {
++		tot += shop->shelf[k];
++	}
++	return tot;
++}
++
++bool ShoeShop_clear(ShoeShop* shop, int row) {
++	// check if shelf had items before clearing
++	// then clear shelf and return whether it had items
++	bool rem = shop->shelf[row] > 0;
++	shop->shelf[row] = 0;
++	return rem;
++}
+diff --git a/solution/Org_ShoeShop.h b/solution/Org_ShoeShop.h
+new file mode 100644
+index 0000000..3faf49a
+--- /dev/null
++++ b/solution/Org_ShoeShop.h
+@@ -0,0 +1,36 @@
++#ifndef SHOESHOP_H
++#define SHOESHOP_H
++
++#include <stdbool.h>
++
++typedef struct {
++	int* shelf;
++	int size;
++} ShoeShop;
++
++// Constructor equivalent - initialize the shop
++ShoeShop* ShoeShop_create(int size);
++/* 
++Size is the number of shelves in the shoe shop, the size of the shop is limited
++to the number of shelves chosen on construction.
++
++Do not try to add items to a row that is out of bounds (i.e. row >= size) 
++that will overwrite unallocated memory
++*/
++
++// destructor equivalent - free memory
++void ShoeShop_destroy(ShoeShop* shop);
++
++// add items to a specific row
++void ShoeShop_add_items(ShoeShop* shop, int row, int num);
++
++// check if items are in stock at a specific row
++int ShoeShop_in_stock(ShoeShop* shop, int row);
++
++// count total items in the shop
++int ShoeShop_count_items(ShoeShop* shop);
++
++// clear items from a specific row, returns true if row had items
++bool ShoeShop_clear(ShoeShop* shop, int row);
++
++#endif
+diff --git a/solution/Org_main.c b/solution/Org_main.c
+new file mode 100644
+index 0000000..6843362
+--- /dev/null
++++ b/solution/Org_main.c
+@@ -0,0 +1,31 @@
++#include "Org_ShoeShop.h"
++#include <stdio.h>
++
++int main() {
++	// I added print statements to make it clearer what is happening
++	// when testing the program
++	printf("Creating a shoe shop with 2 shelves...\n"); 
++	ShoeShop* shop = ShoeShop_create(2);
++	
++	printf("Adding 2 items to shelf 0\n"); 
++	ShoeShop_add_items(shop, 0, 2);
++	printf("Adding 3 items to shelf 1\n");  
++	ShoeShop_add_items(shop, 1, 3);
++	
++	int tot = ShoeShop_count_items(shop);
++	printf("Total items in shop: %d\n", tot); 
++	
++	if (tot > 0) {
++		printf("Clearing shelf 0 - in stock: %d\n", ShoeShop_clear(shop, 0)); 
++		printf("Clearing shelf 1 - in stock: %d\n", ShoeShop_clear(shop, 1));  
++	}
++	
++	int tot_after = ShoeShop_count_items(shop);
++	printf("Total items after clearing: %d\n", tot_after); 
++	
++	printf("Destroying shop...\n");  
++	ShoeShop_destroy(shop);
++	printf("Done!\n");  
++	
++	return 0;
++}

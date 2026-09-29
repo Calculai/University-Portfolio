@@ -1,0 +1,198 @@
+﻿diff --git a/include/tourist.hpp b/include/tourist.hpp
+index 253a344..8c63ef4 100644
+--- a/include/tourist.hpp
++++ b/include/tourist.hpp
+@@ -10,10 +10,14 @@ class Tourist : public Visitor
+ public:
+     std::vector<std::string> list_visited();
+     virtual void visit(Monkey &monkey) override;
+-    virtual void visit(Tiger &monkey) override;
+-    virtual void visit(Fish &monkey) override;
++    virtual void visit(Tiger &tiger) override;
++    virtual void visit(Fish &fish) override;
+     virtual ~Tourist(){};
+ 
++    // changed the name &monkey to &tiger for the visit tiger and
++    // the same for fish because I don't like mixing the terms, 
++    // it is unneeded but also not harmful so I did it for clarity.
++
+ private:
+     std::vector<std::string> visited;
+ };
+diff --git a/src/animal_rights_group.cpp b/src/animal_rights_group.cpp
+index b343f13..e1be925 100644
+--- a/src/animal_rights_group.cpp
++++ b/src/animal_rights_group.cpp
+@@ -9,14 +9,20 @@ AnimalRightsGroup::AnimalRightsGroup(int n_monkeys, int n_tigers, int n_fish)
+ // Implement this (Observer part)
+ void AnimalRightsGroup::update(AnimalEvent event)
+ {
+-    if (event == AnimalEvent::MonkeyFed)
++// discerns between different event via comparing to enum class inherinted from observer
++// internally stores the amount of events triggered
++
++    if (event == AnimalEvent::MonkeyFed) 
+     {
++        n_monkeys_fed++; 
+     }
+     else if (event == AnimalEvent::TigerScratched)
+     {
++        n_tigers_scratched++; 
+     }
+     else if (event == AnimalEvent::FishTeethCleaned)
+     {
++        n_fish_teeth_brushed++;
+     }
+ }
+ 
+diff --git a/src/fish.cpp b/src/fish.cpp
+index 2011024..1c596c0 100644
+--- a/src/fish.cpp
++++ b/src/fish.cpp
+@@ -3,9 +3,11 @@
+ // Implement this (visitor pattern)
+ void Fish::accept(Visitor &visitor)
+ {
++    visitor.visit(*this); // as said in the pdf we simply make the visitor use its function on this object
+ }
+ 
+ // Implement this (Observer part)
+ void Fish::clean_teeth()
+ {
++    notify(AnimalEvent::FishTeethCleaned); // use the inherinted function from Fish -> Animal -> Subject
+ }
+\ No newline at end of file
+diff --git a/src/keeper.cpp b/src/keeper.cpp
+index 59dbd00..223669a 100644
+--- a/src/keeper.cpp
++++ b/src/keeper.cpp
+@@ -1,16 +1,25 @@
+ #include "keeper.hpp"
++#include "monkey.hpp"
++#include "tiger.hpp"
++#include "fish.hpp"
+ 
+ // Implement this (visitor part)
+ void Keeper::visit(Monkey &monkey)
+ {
++    monkey.feed_banana();
++    // the pdf says that when the keeper visits it needs to call the function of the class
+ }
+ 
+ // Implement this (visitor part)
+ void Keeper::visit(Tiger &tiger)
+ {
++    tiger.scratch_back();
++    // see above in monkey
+ }
+ 
+ // Implement this (visitor part)
+-void Keeper::visit(Fish &monkey)
++void Keeper::visit(Fish &fish)
+ {
++    fish.clean_teeth();
++    // see above in monkey
+ }
+\ No newline at end of file
+diff --git a/src/monkey.cpp b/src/monkey.cpp
+index 6561fbf..0cf9a2d 100644
+--- a/src/monkey.cpp
++++ b/src/monkey.cpp
+@@ -3,9 +3,11 @@
+ // Implement this (visitor pattern)
+ void Monkey::accept(Visitor &visitor)
+ {
++    visitor.visit(*this); // as said in the pdf we simply make the visitor use its function on this object
+ }
+ 
+ // Implement this (Observer part)
+ void Monkey::feed_banana()
+ {
++    notify(AnimalEvent::MonkeyFed); // use the inherinted function from Monkey -> Animal -> Subject
+ }
+\ No newline at end of file
+diff --git a/src/subject.cpp b/src/subject.cpp
+index 13dd7bb..940e2eb 100644
+--- a/src/subject.cpp
++++ b/src/subject.cpp
+@@ -3,14 +3,31 @@
+ // Implement this (Observer part)
+ void Subject::attach(Observer *subscriber)
+ {
++    subscribers.push_back(subscriber);
++    // pushback to add to the back of list
+ }
+ 
+ // Implement this (Observer part)
+ void Subject::detach(Observer *subscriber)
+ {
++    subscribers.pop_back();
++    // pop the furthest back in the list item
++    
++    // issue is if we have two subscribers then if we want to remove the first one we added
++    // then you can't without some acrobatics. But simmilarily if we want to remove the second
++    // subscriber we will have the issue if we only remove the front subscriber so it isn't
++    // an improvement necessarily
++
++    // but for the test we don't even use detach and the part in the pdf where it tells me to implement
++    // the functions it is using singular languange, so I will accept the issues
+ }
+ 
+ // Implement this (Observer part)
+ void Subject::notify(AnimalEvent event)
+ {
++    for (Observer *subscriber : subscribers)
++    {
++        subscriber->update(event); // subscribers handle updating so we just notify them of events
++        // running down the list of subscribers notifying each
++    }
+ }
+\ No newline at end of file
+diff --git a/src/tiger.cpp b/src/tiger.cpp
+index 548cee2..d31e428 100644
+--- a/src/tiger.cpp
++++ b/src/tiger.cpp
+@@ -3,9 +3,11 @@
+ // Implement this (visitor pattern)
+ void Tiger::accept(Visitor &visitor)
+ {
++    visitor.visit(*this); // as said in the pdf we simply makes the visitor use its function on this object
+ }
+ 
+ // Implement this (Observer part)
+ void Tiger::scratch_back()
+ {
++    notify(AnimalEvent::TigerScratched); // use the inherinted function from Tiger -> Animal -> Subject
+ }
+\ No newline at end of file
+diff --git a/src/tourist.cpp b/src/tourist.cpp
+index 03c24bf..0a3b3f1 100644
+--- a/src/tourist.cpp
++++ b/src/tourist.cpp
+@@ -3,16 +3,25 @@
+ // Implement this (visitor pattern)
+ void Tourist::visit(Monkey &monkey)
+ {
++    visited.push_back("monkey");
++    // pushback is used to add the string to the end of the vector of strings visited
++    // since it is initialized empty
++    // this way tourist stores the string 
++    // can be used even if we visit again just adds another string
+ }
+ 
+ // Implement this (visitor pattern)
+ void Tourist::visit(Tiger &tiger)
+ {
++    visited.push_back("tiger");
++    // see monkey
+ }
+ 
+ // Implement this (visitor pattern)
+-void Tourist::visit(Fish &monkey)
++void Tourist::visit(Fish &fish)
+ {
++    visited.push_back("fish");
++    // see monkey
+ }
+ 
+ std::vector<std::string> Tourist::list_visited()

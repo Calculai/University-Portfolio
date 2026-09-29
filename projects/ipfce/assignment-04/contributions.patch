@@ -1,0 +1,231 @@
+﻿diff --git a/exercise1.c b/exercise1.c
+index 4ab4c82..e2567ef 100644
+--- a/exercise1.c
++++ b/exercise1.c
+@@ -1,5 +1,9 @@
+ #include <stdio.h>
+ #include <math.h>
++#include <assert.h>
++
++void displayRepaymentPlan(double loanAmount, double monthlyInterestRate, int loanDuration, double monthlyPayment);
++double calculateMonthlyPayment(double loanAmount, double monthlyInterestRate, int loanDuration);
+ 
+ int main()
+ {
+@@ -17,33 +21,66 @@ int main()
+     printf("Enter the loan duration in months: ");
+     scanf("%d", &loanDuration);
+ 
++    assert(loanAmount > 0); // Precondition
++    assert(interestRate > 0); // Precondition 
++    assert(loanDuration > 0); // Precondition 
++
+     // Calculate monthly interest rate
+     double monthlyInterestRate = interestRate / 12;
+ 
+     // Calculate monthly payment
+-    double monthlyPayment = loanAmount * (monthlyInterestRate / (1 - pow(1 + monthlyInterestRate, -loanDuration)));
++    double monthlyPayment = calculateMonthlyPayment(loanAmount, monthlyInterestRate, loanDuration);
++
++    displayRepaymentPlan(loanAmount, monthlyInterestRate, loanDuration, monthlyPayment);
++
++    return 0;
++}
++
++double calculateMonthlyPayment(double loanAmount, double monthlyInterestRate, int loanDuration) {
++    assert(loanAmount > 0); // Precondition
++    assert(monthlyInterestRate > 0); // Precondition
++    assert(loanDuration > 0); // Precondition
+ 
++    double MonthlyPayment = loanAmount * (monthlyInterestRate / (1 - pow(1 + monthlyInterestRate, -loanDuration)));
++
++    assert(MonthlyPayment > 0); // Postcondition
++    
++    return MonthlyPayment;
++}
++
++void displayRepaymentPlan(double loanAmount, double monthlyInterestRate, int loanDuration, double monthlyPayment){
+     // Display repayment plan
++    assert(loanAmount > 0); // Precondition
++    assert(monthlyInterestRate > 0); // Precondition
++
+     printf("\nRepayment Plan:\n");
++    printf("Monthly payment: %.2lf\n",monthlyPayment);
+     printf("Month\tPrincipal\tInterest\tTotal Payment\n");
+ 
+     double remainingBalance = loanAmount;
+-    int month = 1;
++    double totalPayment = 0.0;
+ 
+-    while (1)
++    for (int month = 1; month <= loanDuration; month++)
+     {
+         double interestPayment = remainingBalance * monthlyInterestRate;
+         double principalPayment = monthlyPayment - interestPayment;
+ 
+         remainingBalance -= principalPayment;
++    
++        totalPayment = totalPayment + monthlyPayment;
++        
++        printf("%d\t%.2lf\t\t%.2lf\t\t%.2lf\n", month, principalPayment, interestPayment, totalPayment);
+ 
+-        printf("%d\t%.2lf\t\t%.2lf\t\t%.2lf\n", month, principalPayment, interestPayment, monthlyPayment);
+-
+-        if (++month > loanDuration || remainingBalance <= 0.0)
++        if (remainingBalance <= 0.0)
+         {
+-            // Break the loop when the loan is paid off or the loan term is exceeded
++            assert(monthlyPayment*loanDuration >= loanAmount); // Postcondition
+             break;
+         }
+     }
+-    return 0;
++    assert(monthlyPayment*loanDuration >= loanAmount); // Postcondition
++    /*
++    Checks to make sure that the total amount paid is atleast the amount of the loan
++    */
++
++    return;
+ }
+\ No newline at end of file
+diff --git a/exercise2.c b/exercise2.c
+index f723c36..381eb82 100644
+--- a/exercise2.c
++++ b/exercise2.c
+@@ -7,6 +7,12 @@
+ int get_min(int list[], int n)
+ {
+     assert(n > 0);
+-    return -1;
++    int min = list[0];
++    for (int i = 1; i < n; i++) {
++        if (list[i] < min) {
++            min = list[i];
++        }
++    }
++    
++    return min;
+ }
+-
+diff --git a/exercise4.c b/exercise4.c
+index 2157478..e0c780c 100644
+--- a/exercise4.c
++++ b/exercise4.c
+@@ -7,5 +7,10 @@
+ void reverse(int list[], int rev_array[], int n)
+ {
+     assert(n > 0);
+-    // ...
+-}
+\ No newline at end of file
++    for (int i = 0; i < n; i++)
++    {
++        rev_array[i] = list[n-i-1];
++    }
++    
++    return;
++}
+diff --git a/exercise5.c b/exercise5.c
+index 6d4723a..3b31642 100644
+--- a/exercise5.c
++++ b/exercise5.c
+@@ -7,5 +7,33 @@
+ int longest_seq(int list[], int n)
+ {
+     assert(n > 0);
+-    // ...
+-}
+\ No newline at end of file
++    int max_seq = 0; 
++    int location = -1;
++    
++    for (int i = 0; i < n; i++)
++    {
++        int current_seq = 0;
++        if (list[i] == 0)
++        {
++            current_seq++;
++            for (int j = i+1; j < n; j++)
++            {
++                if (list[j] != 0)
++                {
++                    break;
++                }
++                current_seq++;
++            }
++            
++        }
++        
++        if (current_seq > max_seq)
++        {
++            max_seq = current_seq;
++            location = i;
++        }
++        
++    }
++    
++    return location;
++}
+diff --git a/exercise6.c b/exercise6.c
+index 1e38be8..1bae2aa 100644
+--- a/exercise6.c
++++ b/exercise6.c
+@@ -4,5 +4,22 @@
+  */
+ void count_1_to_20(int a[100][150], int count[20])
+ {
+-    // ... return;
+-}
+\ No newline at end of file
++    for (int i = 0; i < 20; i++)
++    {
++        count[i]=0;
++        for (int j = 0; j < 100; j++)
++        {
++            for (int k = 0; k < 150; k++)
++            {
++                if (a[j][k]==i+1)
++                {
++                    count[i]++;
++                }
++                
++            }
++            
++        }
++        
++    }
++    return;
++}
+diff --git a/exercise7.c b/exercise7.c
+index 0ec65f7..dd2752e 100644
+--- a/exercise7.c
++++ b/exercise7.c
+@@ -7,5 +7,12 @@
+ double average(int list[], int n)
+ {
+     assert(n > 0);
+-    // ...
+-}
+\ No newline at end of file
++    double sum = 0;
++    for (int i = 0; i < n; i++)
++    {
++        sum += list[i];
++    }
++    double avg = sum/n;
++
++    return avg;
++}
+diff --git a/tests/test_exercise7.c b/tests/test_exercise7.c
+index 5d275a2..edf2acb 100644
+--- a/tests/test_exercise7.c
++++ b/tests/test_exercise7.c
+@@ -15,7 +15,7 @@ int main()
+     // Test case 2: Single element
+     int test2[] = {42};
+     double result2 = average(test2, 1);
+-    assert(fabs(result2 - 100.0) < 0.001);
++    assert(fabs(result2 - 42.0) < 0.001); //Corrected expected test value
+ 
+     // Test case 3: Large numbers
+     int test3[] = {1000, 2000, 3000, 4000};

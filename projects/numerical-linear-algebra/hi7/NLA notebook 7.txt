@@ -1,0 +1,34 @@
+First I read the values from the figure and implemented it in python:
+(insert get lamp data)
+
+(a) we can make the linear system y = Ax where x is the strength of each lamp and A is a coefficient matrix where each column is a lamps distance to every individual 600 points in our parking lot. To do this we first make a vector of all 600 points x values for their center and the same with a vector for the y values. Then we use the lamp data to take the difference in x, y and z from each lamp to each position in the lot and square it to find the distances to from each spot in 3D to the lamp. I implemented this in python as such:
+
+(insert get_square_centers + build_coefficient_matrix)  (make them one code block I will combine them)
+
+With this achieved we now have our A which defines our linear system.
+
+(b) here we just generate a lamp strength vector where all values are 20 and multiply it to our coefficient matrix determined in (a) then we plot it
+
+(insert part b)
+
+I made a heatmap helper function:
+
+(insert save_heatmap and reshape_to_lot)
+
+(insert figure part_b_heatmap.png)  
+
+(c) we make a target vector that is 600 long with only 1's and then we solve the system that is this vector and our coefficient matrix using the two methods. I implemented the methods as such:
+
+(insert part_c, insert solve least squares qr, improved gram Schmidt qr and solve least squares svd) (make them one code block I will combine them)
+
+when we evaluate these we find that both contain negative values and therefore are invalid in a physical sense as negative strength lamps isn't possible
+
+(d) I made a deviation heatmap function implemented as so:
+
+(insert deviation heatmap)
+
+I then extracted the maximum deviation and the method difference and used the method difference (largest different value between the methods) to make a heatmap that compare both method in one figure with two subplot and then also two individual plots that show deviation for both methods.
+
+(insert part d)
+
+(insert figures from part d (use the names from the code to figure out what to call them and how many))

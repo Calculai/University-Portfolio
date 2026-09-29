@@ -1,0 +1,184 @@
+﻿diff --git a/exercise3.c b/exercise3.c
+index 832e10d..d318b5b 100644
+--- a/exercise3.c
++++ b/exercise3.c
+@@ -8,7 +8,13 @@
+ 
+ long sum_first_n_odds(int n)
+ {
+-    // TODO: Implement the function recursively
+-    return 0;
++    if(n<1) {return 0;}
++    
++    if (n == 1)
++    {
++        return 1;
++    }
++
++    return (2*n-1) + sum_first_n_odds(n-1);
+ }
+ 
+diff --git a/exercise4.c b/exercise4.c
+index fc44f9f..e8744de 100644
+--- a/exercise4.c
++++ b/exercise4.c
+@@ -6,6 +6,8 @@
+ #include "include/exercise4.h"
+ #include <assert.h>
+ 
++static int sum_tail_recusive_helper(int, int);
++
+ int sum_recursive(int n)
+ {
+     assert(1 <= n);
+@@ -24,13 +26,31 @@ int sum_tail_recursive(int n)
+ {
+     // TODO: Implement the function in a tail-recursive manner
+ 	assert(1 <= n);
+-	return 0;
++	return sum_tail_recusive_helper(n, 0);
++}
++
++static int sum_tail_recusive_helper(int n, int acc) {
++    // acc accumulates the values across recursions and n counts down
++
++    if (n == 0)
++    {
++        return acc;
++    }
++
++    return sum_tail_recusive_helper(n-1, acc+n);
+ }
+ 
+ /* Iterative version using a while loop. */
+ int sum_iterative(int n)
+ {
+     // TODO: Implement the function iteratively using a while loop
+-	return 0;
++    int sum=0;
++    while (n > 0)
++    {
++        sum += n;
++        n--;
++    }
++
++	return sum;
+ }
+ 
+diff --git a/exercise5.c b/exercise5.c
+index e00292e..b731cee 100644
+--- a/exercise5.c
++++ b/exercise5.c
+@@ -5,11 +5,25 @@
+ #include "include/exercise5.h"
+ #include <assert.h>
+ 
++int fibhelper(int, int, int);
+ 
+ int fib(int n)
+ {
+     // TODO: Implement the function using tail recursion
+ 	assert(n >= 1);
+-	return 0;
++
++	return fibhelper(n, 0, 1);
++}
++
++int fibhelper(int n, int psum1, int psum2){
++
++	if (n == 1)
++	{
++		return psum2;
++	}
++	
++
++	return fibhelper(n-1, psum2, psum2+psum1);
+ }
+ 
++
+diff --git a/testexer2.c b/testexer2.c
+new file mode 100644
+index 0000000..10cf7d2
+--- /dev/null
++++ b/testexer2.c
+@@ -0,0 +1,26 @@
++#include <assert.h>
++#include <stdio.h>
++
++long recursive_product (int n, int l[]);
++
++int main (void)
++{
++int l[] = {2, 2, 2};
++int n = 3;
++long result = recursive_product (n, l);
++printf ("The product of the array is: %ld\n", result);
++return 0;
++}
++
++/* product of an array function definition */
++long recursive_product (int n, int l[])
++{
++/* pre-condition */
++assert (n >= 0);
++
++/* post-condition */
++if (n >= 1)
++return recursive_product (n - 1, l)*l[n-1];
++else
++return 1;
++}
+diff --git a/testexer4.c b/testexer4.c
+new file mode 100644
+index 0000000..98b7c42
+--- /dev/null
++++ b/testexer4.c
+@@ -0,0 +1,24 @@
++#include "exercise4.h"
++#include <stdio.h>
++#include <assert.h>
++
++int main(void) {
++    printf("Testing Exercise 4: sum_tail_recursive, sum_iterative\n\n");
++   
++    assert(sum_iterative(6)== 21);
++    assert(sum_iterative(7)== 28);
++    assert(sum_iterative(10)== 55);
++    assert(sum_iterative(50)==1275);
++    assert(sum_iterative(500)==125250);
++    assert(sum_iterative(2500)==3126250);
++
++    assert(sum_tail_recursive(6) == 21);
++    assert(sum_tail_recursive(7) == 28);
++    assert(sum_tail_recursive(10) == 55);
++    assert(sum_tail_recursive(50) == 1275);
++    assert(sum_tail_recursive(500) == 125250);
++    assert(sum_tail_recursive(2500) == 3126250);
++
++    printf("All tests passed for exercise4.\n");
++    return 0;
++}
+\ No newline at end of file
+diff --git a/testexer5.c b/testexer5.c
+new file mode 100644
+index 0000000..e19ea15
+--- /dev/null
++++ b/testexer5.c
+@@ -0,0 +1,17 @@
++#include <stdio.h>
++#include <stdlib.h>
++#include <assert.h>
++
++#include "../include/exercise5.h"
++
++int main(void){
++
++    assert(fib(1) == 1);
++    assert(fib(5) == 5);
++    assert(fib(15) == 610);
++    assert(fib(30) == 832040);
++    assert(fib(46) == 1836311903);
++    printf("test_exercise6: all assertions passed\n");
++
++    return 0;
++}

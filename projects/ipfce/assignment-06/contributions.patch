@@ -1,0 +1,66 @@
+﻿diff --git a/exercise2.c b/exercise2.c
+index b44bf0a..5b7dd45 100644
+--- a/exercise2.c
++++ b/exercise2.c
+@@ -4,5 +4,15 @@
+ // given an array of numbers (and its size), finds the maximum value in the array. 
+ int max(int* numbers, int size)
+ {
+-    return 0; // TODO: implement this function
++    assert(size > 0); // Precondition
++    int max = numbers[0];
++    for (int i = 1; i < size; i++)
++    {
++        if (numbers[i] > max)
++        {
++            max = numbers[i];
++        }
++    }
++    
++    return max; // TODO: implement this function
+ }
+diff --git a/exercise3.c b/exercise3.c
+index 3d2bf04..093dd36 100644
+--- a/exercise3.c
++++ b/exercise3.c
+@@ -41,7 +41,16 @@ void printout(node *l)
+ // E.g. if `size(list)` was printed out at the first `// show list here`) in main, the result would be 3.
+ int size(node *l)
+ {
+-  return 0; // TODO: implement this function
++  assert(l != NULL);
++  int counter = 0;
++  node *current = l;
++  while (current->next != NULL)
++  {
++    current = current->next;
++    counter++;
++  }
++  
++  return counter; // TODO: implement this function
+ }
+ 
+ int largest(node *l)
+@@ -49,7 +58,21 @@ int largest(node *l)
+   // pre:  head point to the first, empty element.
+   //       The last element's next is NULL.
+   // post: Returns the largest value of the list
+-  return 0; // TODO: implement this function
++  assert(l != NULL);
++
++  node *current = l->next;
++  int max = current->data;
++  while (current->next != NULL)
++  {
++    current = current->next;
++
++    if (current->data > max)
++    {
++      max = current->data;
++    }
++  }
++
++  return max; // TODO: implement this function
+ }
+ 
+ // NOTE: Uncomment main to test your implementation

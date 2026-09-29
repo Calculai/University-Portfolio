@@ -1,0 +1,227 @@
+﻿diff --git a/exercise6.c b/exercise6.c
+index ba62475..438a202 100644
+--- a/exercise6.c
++++ b/exercise6.c
+@@ -1,14 +1,28 @@
+ #include "circle.h"
+ #include "point.h"
+ 
+-void five_circles(circle c[]) {
+ 
++void five_circles(circle c[]) {
++    for (int i = 0; i < 5; i++)
++    {
++        c[i].p.x = i;
++        c[i].p.y = i;
++        c[i].r = i;
++    }
++    
+ }
+ 
+ bool circle_is_valid(const circle *c) {
++    
++    if (c->r > 0)
++    {
++        return true;
++    }
++    
+     return false;
+ }
+ 
+ void translate(circle *c, const point *p) {
+-
++    c->p.x = c->p.x + p->x;
++    c->p.y = c->p.y + p->y;
+ }
+\ No newline at end of file
+diff --git a/exercise7.c b/exercise7.c
+index 67f401b..ae3a4fb 100644
+--- a/exercise7.c
++++ b/exercise7.c
+@@ -1,5 +1,38 @@
+ #include <stdbool.h>
+ 
+-bool is_jolly_jumper(const int seq[], int size) {
++
++bool is_jolly_jumper(const int seq[],int size) {
++    int temp;
++    bool diffs_found[50] = {false};
++    bool all_true = true;
++   
++    
++    for (int i = 1; i < size; i++)
++    {
++        temp = seq[i] - seq[i-1];
++        if (temp < 0)
++        {
++            temp = -temp;
++        }
++        if (diffs_found[temp-1] == false)
++        {
++            diffs_found[temp-1] = true;
++        }
++        
++    }
++    
++    for (int i = 0; i < size-1; i++) {
++        if (!diffs_found[i]) {      // if any element is false
++            all_true = false;
++            break;          // no need to check further
++        }
++    }
++    
++    if (all_true == true)
++    {
++        return true;
++    }
++    
++    
+     return false;
+ }
+\ No newline at end of file
+diff --git a/include/circle.h b/include/circle.h
+index 348f71a..7dd9ef9 100644
+--- a/include/circle.h
++++ b/include/circle.h
+@@ -2,8 +2,13 @@
+ #define CIRCLE_H
+ 
+ #include <stdbool.h>
++#include "point.h"
+ 
+-// Define a circle struct with a radius and a point for the center
++// Define a circle struct with a radius 'r' and a point 'p' for the center
++typedef struct{
++    point p;
++    int r;
++} circle;
+ 
+ // Function that fills an array of five circles
+ // Circle c_i has center (i, i) and radius i
+@@ -15,4 +20,4 @@ bool circle_is_valid(const circle *c);
+ // Translates the circle c by the vector represented by point p
+ void translate(circle *c, const point *p);
+ 
+-#endif // CIRCLE_H
+\ No newline at end of file
++#endif // CIRCLE_H
+diff --git a/test_7.c b/test_7.c
+new file mode 100644
+index 0000000..068b24d
+--- /dev/null
++++ b/test_7.c
+@@ -0,0 +1,74 @@
++#include <stdio.h>
++#include <stdbool.h>
++
++bool is_jolly_jumper(const int seq[], int size);
++void test_jolly(int seq[], int size);
++
++int main(void){
++
++    int a[4] = {1, 4, 2, 3};
++    test_jolly (a, 4);
++
++    int b[5] = {1, 4, 2, -1, -6};
++    test_jolly (b, 5);
++
++    int seq[15] = {1, 2, 4, 7, 11, 16, 22, 29, 37, 46, 56, 67, 79, 92, 106};
++    test_jolly (seq, 15);
++}
++
++void test_jolly (int seq[], int size){
++    
++    bool check = is_jolly_jumper(seq, size);
++    printf("%d\n",size);
++    for (int i = 0; i < size; i++)
++    {
++        printf("%d ",seq[i]);
++    }
++    printf("\n");
++    if (check == true)
++    {
++        printf("Jolly\n");
++        return;
++    }
++
++    printf("Not Jolly\n");
++    
++    return;    
++}
++
++
++bool is_jolly_jumper(const int seq[],int size) {
++    int temp;
++    bool diffs_found[50] = {false};
++    bool all_true = true;
++   
++    
++    for (int i = 1; i < size; i++)
++    {
++        temp = seq[i] - seq[i-1];
++        if (temp < 0)
++        {
++            temp = -temp;
++        }
++        if (diffs_found[temp-1] == false)
++        {
++            diffs_found[temp-1] = true;
++        }
++        
++    }
++    
++    for (int i = 0; i < size-1; i++) {
++        if (!diffs_found[i]) {      // if any element is false
++            all_true = false;
++            break;          // no need to check further
++        }
++    }
++    
++    if (all_true == true)
++    {
++        return true;
++    }
++    
++    
++    return false;
++}
+\ No newline at end of file
+diff --git a/tests/test_exercise7.c b/tests/test_exercise7.c
+index 0183dcb..55f9d90 100644
+--- a/tests/test_exercise7.c
++++ b/tests/test_exercise7.c
+@@ -3,28 +3,28 @@
+ #include <stdbool.h>
+ 
+ // Declaration of student's function
+-bool is_jolly_jumber(const int seq[], int size);
++bool is_jolly_jumper(const int seq[], int size);
+ 
+ int main() {
+     // Test case 1: classic jolly
+     int seq1[] = {1, 4, 2, 3};
+-    assert(is_jolly_jumber(seq1, 4) == true);
++    assert(is_jolly_jumper(seq1, 4) == true);
+ 
+     // Test case 2: not jolly
+     int seq2[] = {1, 4, 2, -1, 6};
+-    assert(is_jolly_jumber(seq2, 5) == false);
++    assert(is_jolly_jumper(seq2, 5) == false);
+ 
+     // Test case 3: single element (trivial jolly)
+     int seq3[] = {42};
+-    assert(is_jolly_jumber(seq3, 1) == true);
++    assert(is_jolly_jumper(seq3, 1) == true);
+ 
+     // Test case 4: negative differences
+     int seq4[] = {5, 1, 4, 2};
+-    assert(is_jolly_jumber(seq4, 4) == false);
++    assert(is_jolly_jumper(seq4, 4) == false);
+ 
+     // Test case 5: larger sequence
+     int seq5[] = {11, 7, 4, 2, 1, 6};
+-    assert(is_jolly_jumber(seq5, 6) == true);
++    assert(is_jolly_jumper(seq5, 6) == true);
+ 
+     printf("Exercise 7 tests passed\n");
+     return 0;

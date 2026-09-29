@@ -1,0 +1,125 @@
+﻿diff --git a/exercise2.c b/exercise2.c
+index ca2003a..10279e9 100644
+--- a/exercise2.c
++++ b/exercise2.c
+@@ -1,4 +1,9 @@
+ // write a recursive function that sums the integer array a of length n
+ int sum(const int a[], int n) {
+-    return -1;
++    if (n==0)
++    {
++        return 0;
++    }
++    
++    return a[n-1] + sum(a, n-1);
+ }
+\ No newline at end of file
+diff --git a/exercise3.c b/exercise3.c
+index 9de7e43..5744d9b 100644
+--- a/exercise3.c
++++ b/exercise3.c
+@@ -2,5 +2,15 @@
+ 
+ // write a recursive function that searches for integer x in the integer array a of length n
+ bool search(const int a[], int n, int x) {
+-    return false;
++    if (n==0)
++    {
++        return false;
++    }
++    
++    if (*a == x)
++    {
++        return true;
++    }
++    
++    return search(a+1,n-1,x);
+ }
+\ No newline at end of file
+diff --git a/exercise4.c b/exercise4.c
+index 5c4855a..6564568 100644
+--- a/exercise4.c
++++ b/exercise4.c
+@@ -50,10 +50,62 @@ bool full(stack *s) {
+ }
+ 
+ /* 
+- * Write a function that performs a depth-first search (DFS) for integer x
+- * in the integer array a of length n using a stack.
+- * Return the sequence of visited nodes
+- */
+-node *dfs_search(struct tree_node *root) {
+-    return NULL; // TODO: implement this function
++* Write a function that performs a depth-first search (DFS) for integer x
++* in the integer array a of length n using a stack.
++* Return the sequence of visited nodes
++*/
++
++/*
++I wanted to use the stack from my previous assignment like it says
++in the pdf but the initialization function in here is 
++incompatible and the data types are not the same so I opted to not
++do that. 
++
++The method still relies on the stack method and solves the problem 
++like presented in class it just avoid the mess of having to adapt
++my stack library and instead makes a linked list that pushes to
++end to make my output.
++*/
++
++void append_node(node **head, int value) {
++    node *new_node = malloc(sizeof(node));
++    if (!new_node) {
++        fprintf(stderr, "malloc failed in append_node\n");
++        exit(EXIT_FAILURE);
++    }
++    new_node->data = value;
++    new_node->next = NULL;
++
++    if (*head == NULL) {
++        *head = new_node;
++    } else {
++        node *curr = *head;
++        while (curr->next != NULL) {
++            curr = curr->next;
++        }
++        curr->next = new_node;
++    }
+ }
++
++struct node *dfs_search(struct tree_node *root) {
++    if (!root) return NULL;
++
++    stack s;
++    initialize(&s); // stack of tree nodes
++    struct node *visited = NULL;
++
++    push_btree_node(&s, root);
++
++    while (!empty(&s)) {
++        tree_node *curr = pop_btree_node(&s);
++        if (!curr) continue;
++
++        append_node(&visited, curr->data);
++
++        // Push right first so left is visited first
++        if (curr->right) push_btree_node(&s, curr->right);
++        if (curr->left)  push_btree_node(&s, curr->left);
++    }
++
++    return visited;
++}
+\ No newline at end of file
+diff --git a/tests/test_exercise4.c b/tests/test_exercise4.c
+index 2ead6e4..59901a3 100644
+--- a/tests/test_exercise4.c
++++ b/tests/test_exercise4.c
+@@ -1,7 +1,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <assert.h>
+-#include "exercise4.h" // for dfs_search declaration
++#include "../include\exercise4.h"
+ 
+ // struct node *dfs_search(struct tree_node *root);
+ 

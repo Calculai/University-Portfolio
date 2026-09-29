@@ -1,0 +1,24 @@
+# Compiled test executables
+tests/test_exercise1
+tests/test_exercise2
+
+# Test output files
+tests/test_output_*.txt
+
+# Compiled object files
+*.o
+*.obj
+*.exe
+*.out
+*.a
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
