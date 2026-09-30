@@ -3,7 +3,7 @@
 
 - **Writing programs in C:** implementing exercises involving functions, arrays, strings, pointers, structs, linked lists, stacks, queues, and trees. See [IPFCE 3](projects/ipfce/assignment-03/README.md), [IPFCE 6](projects/ipfce/assignment-06/README.md), and [IPFCE 9](projects/ipfce/assignment-09/README.md).
 - **Writing programs in C++:** using classes, templates, standard library containers, and modern C++ features in larger exercises. See [SOFACE 2](projects/soface/assignment-02/README.md), [SOFACE 3](projects/soface/assignment-03/README.md), and [SOFACE 5](projects/soface/assignment-05/README.md).
-- **Writing scientific Python:** using Python for numerical experiments, visualisation, and working with matrix-based problems. See the [Numerical Linear Algebra work](NUMERICAL-LINEAR-ALGEBRA.html).
+- **Writing scientific Python:** using Python for numerical experiments, visualisation, and working with matrix-based problems. See the [Numerical Linear Algebra work](guides/NUMERICAL-LINEAR-ALGEBRA.html).
 - **Turning written requirements into implementations:** reading an exercise specification, matching required function signatures, and implementing the requested behaviour. See [IPFCE 11](projects/ipfce/assignment-11/README.md) and [SOFACE 3](projects/soface/assignment-03/README.md).
 - **Working within an existing codebase:** adding implementations to provided headers, source files, test suites, and project structures instead of starting from an empty project. See [IPFCE 4](projects/ipfce/assignment-04/README.md) and [SOFACE 7](projects/soface/assignment-07/README.md).
 
@@ -13,7 +13,7 @@
 - **Designing and applying algorithms:** reasoning about the steps needed to solve a problem and implementing them in code. See [IPFCE 7](projects/ipfce/assignment-07/README.md), [IPFCE 8](projects/ipfce/assignment-08/README.md), and [IPFCE 10](projects/ipfce/assignment-10/README.md).
 - **Choosing and implementing data structures:** working with arrays, linked structures, stacks, queues, and binary trees according to the problem being solved. See [IPFCE 6](projects/ipfce/assignment-06/README.md), [IPFCE 9](projects/ipfce/assignment-09/README.md), and [IPFCE 10](projects/ipfce/assignment-10/README.md).
 - **Reasoning about edge cases:** considering invalid input, boundary conditions, empty structures, and different control-flow paths. See [IPFCE 4](projects/ipfce/assignment-04/README.md) and [SOFACE 10](projects/soface/assignment-10/README.md).
-- **Applying mathematical reasoning to code:** implementing numerical methods and connecting mathematical definitions to executable algorithms. See the [Numerical Linear Algebra work](NUMERICAL-LINEAR-ALGEBRA.html) and [SOFACE 7](projects/soface/assignment-07/README.md).
+- **Applying mathematical reasoning to code:** implementing numerical methods and connecting mathematical definitions to executable algorithms. See the [Numerical Linear Algebra work](guides/NUMERICAL-LINEAR-ALGEBRA.html) and [SOFACE 7](projects/soface/assignment-07/README.md).
 
 ## Software design
 
@@ -44,5 +44,5 @@
 ## Communication and working practice
 
 - **Reading unfamiliar code:** understanding provided implementations, headers, tests, and project layouts before changing them. See [SOFACE 7](projects/soface/assignment-07/README.md) and [IPFCE 11](projects/ipfce/assignment-11/README.md).
-- **Explaining implementation decisions:** documenting reasoning where an assignment asks for calculations, comparisons, or design justification. See [SOFACE 10](projects/soface/assignment-10/README.md) and the [Numerical Linear Algebra work](NUMERICAL-LINEAR-ALGEBRA.html).
+- **Explaining implementation decisions:** documenting reasoning where an assignment asks for calculations, comparisons, or design justification. See [SOFACE 10](projects/soface/assignment-10/README.md) and the [Numerical Linear Algebra work](guides/NUMERICAL-LINEAR-ALGEBRA.html).
 - **Working across different scales of project:** moving between small exercises, reusable components, complete programs, experiments, and numerical notebooks or scripts. See the [portfolio README](README.md).

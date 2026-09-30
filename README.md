@@ -16,6 +16,6 @@ Lastly, I had Copilot whip up an HTML page for each major assignment clusters to
 
 ## Assignment guides
 
-- [IPFCE assignment guide](https://calculai.github.io/University-Portfolio/IPFCE.html)
-- [SOFACE assignment guide](https://calculai.github.io/University-Portfolio/SOFACE.html)
-- [Numerical Linear Algebra guide](https://calculai.github.io/University-Portfolio/NUMERICAL-LINEAR-ALGEBRA.html)
+- [IPFCE assignment guide](https://calculai.github.io/University-Portfolio/guides/IPFCE.html)
+- [SOFACE assignment guide](https://calculai.github.io/University-Portfolio/guides/SOFACE.html)
+- [Numerical Linear Algebra guide](https://calculai.github.io/University-Portfolio/guides/NUMERICAL-LINEAR-ALGEBRA.html)
