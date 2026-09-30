@@ -1,0 +1,11 @@
+Testing Exercise 1: Taylor Sine Function
+Test 1 passed: sin(0) = 0
+Test 2 passed: sin(π/6) ≈ 0.5
+Test 3 passed: sin(π/4) ≈ 0.7071
+Test 4 passed: sin(π/2) = 1
+Test 5 passed: sin(π) ≈ 0
+Test 6 passed: sin(-π/6) ≈ -0.5
+Test 7 passed: sin(1.0) with 20 terms
+Test 8 passed: sin(0.1) ≈ 0.0998
+
+All Exercise 1 tests passed!

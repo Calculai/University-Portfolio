@@ -1,0 +1,21 @@
+Testing Exercise 3: Queue Implementation using Singly-Linked Lists
+
+Test 1: Queue Law 1 - After initialize(q), queue must be empty
+✓ Queue is empty after initialization
+
+Test 2: Queue Law 2 - enqueue(q,x); y=dequeue(q); x must equal y
+✓ x=42, y=42 (equal)
+
+Test 3: Queue Law 3 - FIFO order with two elements
+✓ FIFO maintained: x0=10, y0=10; x1=20, y1=20
+
+Test 4: Multiple operations (5 elements)
+✓ Multiple operations maintain FIFO order
+
+Test 5: Interleaved enqueue and dequeue
+✓ Interleaved operations work correctly
+
+Test 6: Larger test (20 elements)
+✓ Larger test passed
+
+🎉 All tests passed! All three queue laws verified.

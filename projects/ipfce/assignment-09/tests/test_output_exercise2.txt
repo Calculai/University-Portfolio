@@ -1,0 +1,10 @@
+In file included from tests/test_exercise2.c:2:
+tests/test_exercise2.c: In function ‘main’:
+tests/test_exercise2.c:21:12: warning: ‘sum’ reading 4 bytes from a region of size 0 [-Wstringop-overread]
+   21 |     assert(sum(arr3, 0) == 0); // base case
+      |            ^~~~~~~~~~~~
+tests/test_exercise2.c:21:12: note: referencing argument 1 of type ‘const int *’
+tests/test_exercise2.c:5:5: note: in a call to function ‘sum’
+    5 | int sum(const int a[], int n);
+      |     ^~~
+Exercise 2 tests passed successfully!

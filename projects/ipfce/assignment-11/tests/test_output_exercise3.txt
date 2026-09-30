@@ -1,0 +1,24 @@
+Testing Exercise 3: sum_first_n_odds
+
+Test 1: n = 1
+✓ n=1 -> 1
+
+Test 2: n = 2
+✓ n=2 -> 4
+
+Test 3: n = 5
+✓ n=5 -> 25
+
+Test 4: n = 10
+✓ n=10 -> 100
+
+Test 5: n = 0 (edge case)
+✓ n=0 -> 0
+
+Test 6: n = -3 (negative)
+✓ n=-3 -> 0
+
+Test 7: n = 1000 (sanity)
+✓ n=1000 -> 1000000
+
+All tests in test_exercise3.c passed.

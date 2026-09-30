@@ -1,0 +1,51 @@
+Testing Exercise 4: sum_recursive vs sum_tail_recursive vs sum_iterative
+
+Test n=1
+  sum_recursive(1) = 1
+  sum_tail_recursive(1) = 1
+  sum_iterative(1) = 1
+  ✓ all implementations agree for n=1
+
+Test n=2
+  sum_recursive(2) = 3
+  sum_tail_recursive(2) = 3
+  sum_iterative(2) = 3
+  ✓ all implementations agree for n=2
+
+Test n=3
+  sum_recursive(3) = 6
+  sum_tail_recursive(3) = 6
+  sum_iterative(3) = 6
+  ✓ all implementations agree for n=3
+
+Test n=5
+  sum_recursive(5) = 15
+  sum_tail_recursive(5) = 15
+  sum_iterative(5) = 15
+  ✓ all implementations agree for n=5
+
+Test n=10
+  sum_recursive(10) = 55
+  sum_tail_recursive(10) = 55
+  sum_iterative(10) = 55
+  ✓ all implementations agree for n=10
+
+Test n=50
+  sum_recursive(50) = 1275
+  sum_tail_recursive(50) = 1275
+  sum_iterative(50) = 1275
+  ✓ all implementations agree for n=50
+
+Test n=100
+  sum_recursive(100) = 5050
+  sum_tail_recursive(100) = 5050
+  sum_iterative(100) = 5050
+  ✓ all implementations agree for n=100
+
+Test n=1000
+  sum_recursive(1000) = 500500
+  sum_tail_recursive(1000) = 500500
+  sum_iterative(1000) = 500500
+  ✓ all implementations agree for n=1000
+
+All tests passed for exercise4 implementations.

@@ -1,0 +1,2 @@
+test_exercise7: tests/test_exercise7.c:18: main: Assertion `fabs(result2 - 100.0) < 0.001' failed.
+timeout: the monitored command dumped core

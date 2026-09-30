@@ -1,0 +1,21 @@
+Testing Exercise 4: Queue Implementation using Stacks
+
+Test 1: Queue initialization
+✓ Queue is empty after initialization
+
+Test 2: Single enqueue/dequeue
+✓ Single enqueue/dequeue works correctly
+
+Test 3: FIFO order with three elements
+✓ FIFO order maintained
+
+Test 4: Interleaved enqueue/dequeue
+✓ Interleaved operations work correctly
+
+Test 5: Multiple operations (10 elements)
+✓ Multiple operations maintain FIFO order
+
+Test 6: Stress test (25 elements)
+✓ Stress test passed
+
+🎉 All tests passed!

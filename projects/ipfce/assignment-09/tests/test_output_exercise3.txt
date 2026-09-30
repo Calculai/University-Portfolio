@@ -1,0 +1,10 @@
+In file included from tests/test_exercise3.c:2:
+tests/test_exercise3.c: In function ‘main’:
+tests/test_exercise3.c:26:12: warning: ‘search’ reading 4 bytes from a region of size 0 [-Wstringop-overread]
+   26 |     assert(search(empty, 0, 1) == false);
+      |            ^~~~~~~~~~~~~~~~~~~
+tests/test_exercise3.c:26:12: note: referencing argument 1 of type ‘const int *’
+tests/test_exercise3.c:6:6: note: in a call to function ‘search’
+    6 | bool search(const int a[], int n, int x);
+      |      ^~~~~~
+Exercise 3 tests passed successfully!

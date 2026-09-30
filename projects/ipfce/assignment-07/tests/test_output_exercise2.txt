@@ -1,0 +1,13 @@
+Testing Exercise 2: Stack Implementation
+Test 1 passed: Stack initialization
+Test 2 passed: Empty stack returns true
+Test 3 passed: Full stack returns false (linked list)
+Test 4 passed: Push single item (stack not empty)
+Test 5 passed: Pop returns correct value (10)
+Test 6 passed: Stack empty after popping all items
+Test 7 passed: LIFO order (push 1,2,3; pop returns 3)
+Test 8 passed: LIFO order continues (pop returns 2)
+Test 9 passed: LIFO order final (pop returns 1)
+Test 10 passed: Multiple push/pop maintains LIFO order
+
+All Exercise 2 tests passed!

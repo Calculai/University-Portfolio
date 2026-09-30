@@ -1,0 +1,33 @@
+Testing Exercise 2: Insertion Sort for Singly Linked List
+
+Test 1: Sort [5, 1, 3, 7, 2]
+Before: 5 -> 1 -> 3 -> 7 -> 2 -> NULL
+After:  1 -> 2 -> 3 -> 5 -> 7 -> NULL
+✓ Test 1 passed
+
+Test 2: Already sorted list [1, 2, 3, 4, 5]
+Before: 1 -> 2 -> 3 -> 4 -> 5 -> NULL
+After:  1 -> 2 -> 3 -> 4 -> 5 -> NULL
+✓ Test 2 passed
+
+Test 3: Reverse sorted [5, 4, 3, 2, 1]
+Before: 5 -> 4 -> 3 -> 2 -> 1 -> NULL
+After:  1 -> 2 -> 3 -> 4 -> 5 -> NULL
+✓ Test 3 passed
+
+Test 4: List with duplicates [3, 1, 4, 1, 5]
+Before: 3 -> 1 -> 4 -> 1 -> 5 -> NULL
+After:  1 -> 1 -> 3 -> 4 -> 5 -> NULL
+✓ Test 4 passed
+
+Test 5: Two elements [2, 1]
+Before: 2 -> 1 -> NULL
+After:  1 -> 2 -> NULL
+✓ Test 5 passed
+
+Test 6: Negative numbers [-5, 3, -2, 0]
+Before: -5 -> 3 -> -2 -> 0 -> NULL
+After:  -5 -> -2 -> 0 -> 3 -> NULL
+✓ Test 6 passed
+
+🎉 All tests passed!
