@@ -4,7 +4,7 @@ This is not a formal project; rather, it is me gathering together everything I h
 
 It is intended to make my work available for others to look through. I have tried to make it a little easier to navigate, but it was never meant to be shared in this format, so it wasn't designed with that in mind. It will contain scripts with no comments, as well as scripts with overexplained comments to demonstrate my understanding to the instructor, depending on the assignment I was working on.
 
-I could go through and re-document everything, but that would be time-consuming. Alternatively, using AI to do so wouldn't be demonstrative of my own work, so I have decided to leave it in its rather crude state.
+I could go through and re-document everything, but that would be time-consuming and I would rather work on new projects. Alternatively, using AI to do so wouldn't be demonstrative of my own work, so I have decided to leave it in its rather crude state.
 
 Feel free to look around. I have also compiled a longer list of the skills demonstrated across the assignments.
 
