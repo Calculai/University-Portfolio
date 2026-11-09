@@ -14,10 +14,6 @@ The projects reflect the requirements and conventions of their original courses.
 | **Computer Architecture** | Experiments including a comparison of C memory-allocation methods. | [Memory allocation project](projects/computer-architecture/memory-allocation/README.md) |
 | **Other coursework** | Additional exercises and experiments collected over time. | [Miscellaneous coursework](projects/miscellaneous-coursework/) |
 
-- [IPFCE assignment guide](https://calculai.github.io/University-Portfolio/guides/IPFCE.html)
-- [SOFACE assignment guide](https://calculai.github.io/University-Portfolio/guides/SOFACE.html)
-- [Numerical Linear Algebra guide](https://calculai.github.io/University-Portfolio/guides/NUMERICAL-LINEAR-ALGEBRA.html)
-
 ## Understanding coursework contributions
 
 Some assignments started from course-provided repositories or files. Where available, a `contributions.patch` file records changes made for the assignment; check it alongside the assignment README to see the implementation in context. 
