@@ -8,9 +8,9 @@ The projects reflect the requirements and conventions of their original courses.
 
 | Subject area | Contents | Guide |
 |---|---|---|
-| **IPFCE** | C programming exercises, from foundational programming to algorithms, data structures, and testing. | [Assignment guide](guides/IPFCE.html) |
-| **SOFACE** | Software architecture assignments covering abstraction, design patterns, networking, concurrency, and reuse. | [Assignment guide](guides/SOFACE.html) |
-| **Numerical Linear Algebra** | Python coursework exploring numerical methods, linear algebra, and visualization. | [Assignment guide](guides/NUMERICAL-LINEAR-ALGEBRA.html) |
+| **IPFCE** | C programming exercises, from foundational programming to algorithms, data structures, and testing. | [Assignment guide](https://calculai.github.io/University-Portfolio/guides/IPFCE.html) |
+| **SOFACE** | Software architecture assignments covering abstraction, design patterns, networking, concurrency, and reuse. | [Assignment guide](https://calculai.github.io/University-Portfolio/guides/SOFACE.html) |
+| **Numerical Linear Algebra** | Python coursework exploring numerical methods, linear algebra, and visualization. | [Assignment guide](https://calculai.github.io/University-Portfolio/guides/NUMERICAL-LINEAR-ALGEBRA.html) |
 | **Computer Architecture** | Experiments including a comparison of C memory-allocation methods. | [Memory allocation project](projects/computer-architecture/memory-allocation/README.md) |
 | **Other coursework** | Additional exercises and experiments collected over time. | [Miscellaneous coursework](projects/miscellaneous-coursework/) |
 
